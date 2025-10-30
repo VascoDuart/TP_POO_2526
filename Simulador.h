@@ -5,14 +5,13 @@
 #include "Jardineiro.h"
 #include "InterfaceGrelha.h"
 #include "Comando.h"
+#include "iostream"
+#include "string"
+#include "algorithm"
 
 class Simulador {
 private:
-    Jardim* jardim;
-    Jardineiro* jardineiro;
-    InterfaceGrelha* interfaceGrelha;
 
-    int instanteAtual;
 
 public:
     Simulador();
@@ -21,6 +20,13 @@ public:
     void iniciar();
 
 private:
+
+    Jardim* jardim;
+    Jardineiro* jardineiro;
+    InterfaceGrelha* interfaceGrelha;
+
+    int instanteAtual;
+
     Comando lerComando() const;
 
     void executarComando(const Comando& cmd);

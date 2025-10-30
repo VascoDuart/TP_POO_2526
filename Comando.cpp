@@ -103,3 +103,8 @@ void Comando::validarComando() {
         valido = false;
     }
 }
+
+
+bool Comando::isValido() const{
+    return valido;
+}
