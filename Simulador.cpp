@@ -41,3 +41,16 @@ static std::string toLower(const std::string& s) {
     std::transform(out.begin(), out.end(), out.begin(), ::tolower);
     return out;
 }
+
+void Simulador::executarComando(const Comando& cmd) {
+
+    cmd.getComando();
+
+    if (cmd.isValido()) {
+        std::cout << "Comando válido." << std::endl;
+    } else {
+        std::cout << "Comando inválido." << std::endl;
+    }
+
+}
+
