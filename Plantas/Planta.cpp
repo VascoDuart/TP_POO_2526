@@ -3,3 +3,7 @@
 //
 
 #include "Planta.h"
+
+Planta::Planta(int agua, int nutrientes, char tipo, Beleza belezaTipo)
+    : aguaInterna(agua), nutrientesInternos(nutrientes), tipoPlanta(tipo), beleza(belezaTipo), tempoVida(0) {}
+

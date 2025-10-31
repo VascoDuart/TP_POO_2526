@@ -6,6 +6,7 @@
 #include "../Settings.h"
 #include "../Posicao.h"
 
+
 enum class Beleza {
     NEUTRA,
     FEIA,
@@ -20,7 +21,7 @@ class Planta {
 
 public:
     Planta(int agua, int nutrientes, char tipo, Beleza belezaTipo);
-        : aguaInterna(agua), nutrientesInternos(nutrientes), tipoPlanta(tipo), beleza(belezaTipo), tempoVida(0) {};
+
 
     virtual ~Planta() = default;
 
