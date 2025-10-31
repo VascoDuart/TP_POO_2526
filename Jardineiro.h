@@ -38,6 +38,8 @@ public:
     bool estaPresente() const { return presenteNoJardim; }
     int getLinha() const { return linha; }
     int getColuna() const { return coluna; }
+
+    ~Jardineiro();
 };
 
 

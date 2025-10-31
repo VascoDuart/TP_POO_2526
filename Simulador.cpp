@@ -2,6 +2,8 @@
 // Created by david on 24/10/2025.
 //
 
+#include <ctime>
+#include <cstdlib>
 #include "Simulador.h"
 
 Simulador::Simulador()
@@ -16,7 +18,9 @@ Simulador::~Simulador() {
 }
 
 void Simulador::iniciar() {
-    cout << "Simulador iniciado!" << endl;
+    std::srand(std::time(0));
+
+    std::cout << "Simulador iniciado!" << std::endl;
 
     while (true) {
         Comando cmd = lerComando();
@@ -44,13 +48,32 @@ static std::string toLower(const std::string& s) {
 
 void Simulador::executarComando(const Comando& cmd) {
 
-    cmd.getComando();
+    std::string comando = cmd.getComando();
+    const std::vector<std::string>& p = cmd.getParametros();
 
-    if (cmd.isValido()) {
-        std::cout << "Comando válido." << std::endl;
-    } else {
-        std::cout << "Comando inválido." << std::endl;
+    if (comando == "jardim") {
+        if (jardim == nullptr) {
+            int linhas = std::stoi(p[0]);
+            int colunas = std::stoi(p[1]);
+
+            jardim = new Jardim(linhas, colunas);
+
+            jardineiro = new Jardineiro();
+
+            std::cout << "Jardim de " << linhas << "x" << colunas << " criado com sucesso." << std::endl;
+        } else {
+            std::cout << "Erro: O comando 'jardim' já foi executado." << std::endl;
+        }
     }
-
+    else if (jardim == nullptr) {
+        std::cout << "Erro: O comando 'jardim <n> <n>' deve ser executado primeiro." << std::endl;
+    }
+    else if (comando == "fim") {
+        std::cout << "A encerrar o simulador..." << std::endl;
+        exit(0);
+    }
+    else {
+        std::cout << "Comando '" << comando << "' válido, mas a funcionalidade não está implementada." << std::endl;
+    }
 }
 

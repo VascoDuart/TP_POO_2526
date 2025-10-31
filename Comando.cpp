@@ -1,24 +1,41 @@
 #include "Comando.h"
 #include <sstream>
+#include <algorithm>
 
 using namespace std;
 
 void Comando::parseLinha(const string& linhaComando) {
     istringstream iss(linhaComando);
-    iss >> comando;
+    string tempComando;
+
+    if (iss >> tempComando) {
+        std::transform(tempComando.begin(), tempComando.end(), tempComando.begin(),
+                       [](unsigned char c){ return std::tolower(c); });
+
+        comando = tempComando;
+    }
     string parametro;
     while (iss >> parametro) {
         parametros.push_back(parametro);
     }
 }
 
-Comando::Comando(const std::string &input) {
+Comando::Comando(const std::string &input) : valido(true) {
     parseLinha(input);
-    validarComando();
+
+    if (comando.empty()) {
+        valido = false;
+    } else {
+        validarComando();
+    }
 }
 
 std::string Comando::getComando() const {
-    return comando; // substitua 'comando' pelo nome do membro que armazena a string, se for diferente
+    return comando;
+}
+
+std::vector<std::string> Comando::getParametros() const {
+    return parametros;
 }
 
 bool Comando::isInt(const std::string& s) const {
