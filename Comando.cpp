@@ -9,8 +9,7 @@ void Comando::parseLinha(const string& linhaComando) {
     string tempComando;
 
     if (iss >> tempComando) {
-        std::transform(tempComando.begin(), tempComando.end(), tempComando.begin(),
-                       [](unsigned char c){ return std::tolower(c); });
+        std::transform(tempComando.begin(), tempComando.end(), tempComando.begin(),::tolower);
 
         comando = tempComando;
     }
