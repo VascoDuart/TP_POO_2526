@@ -2,8 +2,11 @@
 #define TP_POO_2526_POSICAO_H
 
 
-#include "Plantas/Planta.h"
+//#include "Plantas/Planta.h"
 #include "Ferramentas/Ferramenta.h"
+
+
+class Planta; // Declaração antecipada para evitar dependência circular
 
 class Posicao {
     int agua, nutrientes;

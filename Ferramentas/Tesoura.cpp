@@ -18,9 +18,13 @@ void Tesoura::cortaPlanta(Posicao& pos) {
     Planta* p = pos.getPlanta();
 
     if(p->getBeleza() == Beleza::FEIA){
-        p->acaoAoSerRemovida();
+        p->acaoAoSerRemovida(pos);
         pos.removePlanta();
         std::cout << "Planta feia cortada e removida do jardim!" << std::endl;
     }
 
+}
+
+Tesoura::~Tesoura() {
+    std::cout << "Tesoura destruida!" << std::endl;
 }

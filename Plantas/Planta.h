@@ -23,14 +23,14 @@ public:
     Planta(int agua, int nutrientes, char tipo, Beleza belezaTipo);
 
 
-    virtual ~Planta() = default;
+    virtual ~Planta();
 
-    int getAguaInterna() const { return aguaInterna; }
-    char getTipoPlanta() const { return tipoPlanta; }
-    Beleza getBeleza() const { return beleza; }
-    int getTempoVida() const { return tempoVida; }
+    int getAguaInterna() const;
+    char getTipoPlanta() const;
+    Beleza getBeleza() const;
+    int getTempoVida() const;
 
-    void incrementaInstantes() { tempoVida++; }
+    void incrementaInstantes();
     virtual void passaInstante(Posicao& solo) = 0;
 
     virtual bool verificaMorte(const Posicao& solo) const = 0;

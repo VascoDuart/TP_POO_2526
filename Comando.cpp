@@ -17,6 +17,10 @@ Comando::Comando(const std::string &input) {
     validarComando();
 }
 
+std::string Comando::getComando() const {
+    return comando; // substitua 'comando' pelo nome do membro que armazena a string, se for diferente
+}
+
 bool Comando::isInt(const std::string& s) const {
     if (s.empty() || s == "0") return false;
 
