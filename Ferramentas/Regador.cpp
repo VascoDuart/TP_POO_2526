@@ -19,7 +19,7 @@ void Regador::verificaCapacidade() const {
     }
 }
 
-void Regador::aplicaAgua(Posicao pos) {
+void Regador::aplica(Posicao& pos) {
     verificaCapacidade();
     if(capacidade>=dose){
         pos.adicionaAgua(dose);
@@ -29,9 +29,4 @@ void Regador::aplicaAgua(Posicao pos) {
         std::cout << "Regador sem capacidade suficiente para aplicar dose!" << std::endl;
     }
     verificaCapacidade();
-}
-
-
-Regador::~Regador() {
-std::cout << "Regador destruido" << std::endl;
 }

@@ -16,8 +16,8 @@ public:
     Regador();
 
     void verificaCapacidade() const;
-    void aplicaAgua(Posicao pos);
-    ~Regador();
+    void aplica(Posicao& pos) override;
+
 
 private:
     int capacidade;
