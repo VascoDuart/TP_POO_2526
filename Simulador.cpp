@@ -99,7 +99,7 @@ void Simulador::executarComando(const Comando& cmd) {
         std::cout << "Jardineiro move-se uma posicao para baixo" << std::endl;
     }
     else if (comando == "entra") {
-        std::cout << "Jardineiro entra no jardim nas coordenadas(l,c) "<< p[0] << " " << p[1] << std::endl;         //ERRO NESTE COMANDO
+        std::cout << "Jardineiro entra no jardim nas coordenadas " << p[0] << std::endl;
     }
     else if (comando == "sai") {
         std::cout << "Jardineiro sai do jardim" << std::endl;
@@ -108,10 +108,10 @@ void Simulador::executarComando(const Comando& cmd) {
     //Comandos para acoes
 
     else if (comando == "colhe") {
-        std::cout << "Jardineiro colhe na posicao(l.c) " << p[0]<< " "<< p[1] << std::endl;        //ERRO NESTE COMANDO
+        std::cout << "Jardineiro colhe na posicao " << p[0] << std::endl;
     }
     else if (comando == "planta") {
-        std::cout << "Jardineiro planta " << p[2] <<"na posicao(l.c) " << p[0]<< " "<< p[1] << std::endl;        //ERRO NESTE COMANDO
+        std::cout << "Jardineiro planta " << p[1] <<" na posicao " << p[0] << std::endl;
     }
     else if (comando == "larga") {
         std:cout << "Jardineiro larga a ferramenta que esta' na sua mao" << std::endl;
@@ -129,7 +129,7 @@ void Simulador::executarComando(const Comando& cmd) {
         std::cout << "Lista de todas as plantas do jardim" << std::endl;
     }
     else if (comando == "lplanta") {
-        std::cout << "Lista de informacao da planta na posicao(l.c) " << p[0]<< " "<< p[1] << std::endl;        //ERRO NESTE COMANDO
+        std::cout << "Lista de informacao da planta na posicao " << p[0] << std::endl;
     }
     else if (comando == "larea") {
         std::cout << "Informacao da area do jardim" << std::endl;
@@ -143,7 +143,20 @@ void Simulador::executarComando(const Comando& cmd) {
 
     //Comandos para o tempo simulado
     else if (comando == "avanca") {
-        std::cout << "A avancar o tempo em " << p[0] << " passos..." << std::endl;      //ERRO ao tentar usar valor default
+
+        int numPassos = 1;
+
+        if (p.empty()) {
+            std::cout << "A avancar o tempo em 1 passo (default)..." << std::endl;
+        } else {
+            try {
+                numPassos = std::stoi(p[0]);
+                std::cout << "A avancar o tempo em " << numPassos << " passos..." << std::endl;
+            } catch (const std::exception& e) {
+                std::cout << "Erro interno na conversão de passos." << std::endl;
+                return;
+            }
+        }
     }
 
     else if (comando == "fim") {
