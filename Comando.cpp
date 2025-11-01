@@ -73,8 +73,20 @@ void Comando::validarComando() {
     const std::vector<std::string>& p = parametros;
 
     if (comando == "jardim") {
-        if (p.size() != 2 || !isInt(p[0]) || !isInt(p[1])) {
+
+        if (p.size() != 2) {
             valido = false;
+        }
+        else if (!isInt(p[0]) || !isInt(p[1])) {
+            valido = false;
+        }
+        else {
+            int linhas = std::stoi(p[0]);
+            int colunas = std::stoi(p[1]);
+
+            if (linhas < 1 || linhas > 26 || colunas < 1 || colunas > 26) {
+                valido = false;
+            }
         }
     } else if (comando == "grava" || comando == "recupera" || comando == "apaga" || comando == "executa") {
         if (p.size() != 1) {

@@ -19,3 +19,7 @@ Jardim::~Jardim() {
     }
     delete[] grelha;
 }
+
+const Posicao& Jardim::getPosicao(int linha, int coluna) const {
+    return grelha[linha][coluna];
+}

@@ -15,7 +15,7 @@ public:
 
     int getNumLinhas() const { return numLinhas; }
     int getNumColunas() const { return numColunas; }
-    Posicao& getPosicao(int linha, int coluna) const;
+    const Posicao& getPosicao(int linha, int coluna) const;
     bool ePosicaoValida(int linha, int coluna) const;
 
     void adicionaObjeto(int linha, int coluna, Planta* p);

@@ -1,13 +1,16 @@
-//
-// Created by david on 24/10/2025.
-//
-
 #ifndef TP_POO_2526_INTERFACEGRELHA_H
 #define TP_POO_2526_INTERFACEGRELHA_H
 
 
-class InterfaceGrelha {
+#include "Jardim.h"
+#include "Jardineiro.h"
 
+class InterfaceGrelha {
+    const Jardim& jardim;
+    const Jardineiro& jd;
+public:
+    InterfaceGrelha(Jardim& jardim,Jardineiro& jardineiro);
+    void desenharJardim() const;
 };
 
 

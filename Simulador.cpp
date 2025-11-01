@@ -1,7 +1,3 @@
-//
-// Created by david on 24/10/2025.
-//
-
 #include <ctime>
 #include <cstdlib>
 #include "Simulador.h"
@@ -52,15 +48,17 @@ void Simulador::executarComando(const Comando& cmd) {
 
     std::string comando = cmd.getComando();
     const std::vector<std::string>& p = cmd.getParametros();
+    bool estadoAlterado = false;
 
-    if (comando == "jardim") {              //1º comando
+    if (comando == "jardim") {
         if (jardim == nullptr) {
             int linhas = std::stoi(p[0]);
             int colunas = std::stoi(p[1]);
 
             jardim = new Jardim(linhas, colunas);
-
             jardineiro = new Jardineiro();
+            interfaceGrelha = new InterfaceGrelha(*jardim, *jardineiro);
+            estadoAlterado = true;
 
             std::cout << "Jardim de " << linhas << "x" << colunas << " criado com sucesso." << std::endl;
         } else {
@@ -74,9 +72,11 @@ void Simulador::executarComando(const Comando& cmd) {
     //Comandos adicionais de caracter geral
     else if (comando == "grava") {
         std::cout << "A gravar o estado do jardim no ficheiro '" << p[0] << "'..." << std::endl;
+        estadoAlterado = true;
     }
     else if (comando == "recupera") {
         std::cout << "A recuperar o estado do jardim do ficheiro '" << p[0] << "'..." << std::endl;
+        estadoAlterado = true;
     }
     else if (comando == "apaga") {
         std::cout << "A apagar o ficheiro '" << p[0] << "'..." << std::endl;
@@ -88,39 +88,50 @@ void Simulador::executarComando(const Comando& cmd) {
     //Comandos para o movimento do jardineiro
     else if (comando == "e") {
         std::cout << "Jardineiro move-se uma posicao para a esquerda" << std::endl;
+        estadoAlterado = true;
     }
     else if (comando == "d"){
         std::cout << "Jardineiro move-se uma posicao para a direita" << std::endl;
+        estadoAlterado = true;
     }
     else if (comando == "c"){
         std::cout << "Jardineiro move-se uma posicao para cima" << std::endl;
+        estadoAlterado = true;
     }
     else if (comando == "b"){
         std::cout << "Jardineiro move-se uma posicao para baixo" << std::endl;
+        estadoAlterado = true;
     }
     else if (comando == "entra") {
         std::cout << "Jardineiro entra no jardim nas coordenadas " << p[0] << std::endl;
+        estadoAlterado = true;
     }
     else if (comando == "sai") {
         std::cout << "Jardineiro sai do jardim" << std::endl;
+        estadoAlterado = true;
     }
 
     //Comandos para acoes
 
     else if (comando == "colhe") {
         std::cout << "Jardineiro colhe na posicao " << p[0] << std::endl;
+        estadoAlterado = true;
     }
     else if (comando == "planta") {
         std::cout << "Jardineiro planta " << p[1] <<" na posicao " << p[0] << std::endl;
+        estadoAlterado = true;
     }
     else if (comando == "larga") {
         std:cout << "Jardineiro larga a ferramenta que esta' na sua mao" << std::endl;
+        estadoAlterado = true;
     }
     else if (comando == "pega") {
         std::cout << "Jardineiro pega na ferramenta" << std::endl;
+        estadoAlterado = true;
     }
     else if (comando == "compra") {
         std::cout << "Jardineiro compra uma ferramenta do tipo " << p[0] << std::endl;
+        estadoAlterado = true;
     }
 
     //Comandos para lista informacao
@@ -135,7 +146,17 @@ void Simulador::executarComando(const Comando& cmd) {
         std::cout << "Informacao da area do jardim" << std::endl;
     }
     else if (comando == "lsolo") {
-            std::cout << "Informacao do solo na posicao(l.c) " << p[0]<< " "<< p[1] << std::endl;        //ERRO NESTE COMANDO
+
+        std::cout << "--- Informacao do Solo ---" << std::endl;
+        std::cout << "Posicao (l.c): " << p[0];
+
+        if (p.size() == 2) {
+            std::cout << " (com area: " << p[1] << ")";
+        }
+
+        std::cout << std::endl;
+
+        return;
     }
     else if (comando == "lferr") {
         std::cout << "Lista de todas as ferramentas do jardineiro" << std::endl;
@@ -157,6 +178,7 @@ void Simulador::executarComando(const Comando& cmd) {
                 return;
             }
         }
+        estadoAlterado = true;
     }
 
     else if (comando == "fim") {
@@ -165,6 +187,10 @@ void Simulador::executarComando(const Comando& cmd) {
     }
     else {
         std::cout << "Comando '" << comando << "' valido, mas a funcionalidade nao esta implementada." << std::endl;
+    }
+
+    if (jardim != nullptr && interfaceGrelha != nullptr && estadoAlterado) {
+        interfaceGrelha->desenharJardim();
     }
 }
 
