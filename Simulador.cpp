@@ -23,7 +23,7 @@ void Simulador::iniciar() {
     while (true) {
         Comando cmd = lerComando();
         if (!cmd.isValido()) {
-            cout << "Comando invalido. Tente novamente." << endl;
+            std::cout << cmd.getMsgErro() << std::endl;
             continue;
         }
 
@@ -62,7 +62,7 @@ void Simulador::executarComando(const Comando& cmd) {
 
             std::cout << "Jardim de " << linhas << "x" << colunas << " criado com sucesso." << std::endl;
         } else {
-            std::cout << "Erro: O comando 'jardim' já foi executado." << std::endl;
+            std::cout << "Erro: O comando 'jardim' ja foi executado." << std::endl;
         }
     }
     else if (jardim == nullptr) {
