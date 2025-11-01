@@ -1,7 +1,3 @@
-//
-// Created by david on 24/10/2025.
-//
-
 #include "Planta.h"
 
 Planta::Planta(int agua, int nutrientes, char tipo, Beleza belezaTipo)

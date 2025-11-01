@@ -1,5 +1,6 @@
-//
-// Created by david on 24/10/2025.
-//
-
 #include "ErvaDaninha.h"
+
+ErvaDaninha::ErvaDaninha()
+        : Planta( 5,5,'E',Beleza::FEIA ),
+            instantesDesdeMultiplicacao(0)
+{}

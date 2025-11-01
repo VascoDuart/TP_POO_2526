@@ -31,8 +31,8 @@ public:
     int getTempoVida() const;
 
     void incrementaInstantes();
-    virtual void passaInstante(Posicao& solo) = 0;
 
+    virtual void passaInstante(Posicao& solo) = 0;
     virtual bool verificaMorte(const Posicao& solo) const = 0;
     virtual Planta* tentaMultiplicar() = 0;
     virtual void acaoAoSerRemovida(Posicao& solo) = 0;

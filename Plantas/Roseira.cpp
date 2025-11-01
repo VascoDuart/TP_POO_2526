@@ -1,5 +1,5 @@
-//
-// Created by david on 24/10/2025.
-//
-
 #include "Roseira.h"
+
+Roseira::Roseira()
+        : Planta( 25,25,'R',Beleza::BONITA )
+{}

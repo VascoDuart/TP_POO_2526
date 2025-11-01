@@ -10,11 +10,11 @@ class Roseira : public Planta{
 public:
     Roseira();
 
-    void passaInstante(Posicao& solo) ;
-    bool verificaMorte(const Posicao& solo) const ;
-    Planta* tentaMultiplicar() ;
-    void acaoAoSerRemovida(Posicao& solo) ;
-    void serPodada() ;
+    void passaInstante(Posicao& solo) override;
+    bool verificaMorte(const Posicao& solo) const override;
+    Planta* tentaMultiplicar() override;
+    void acaoAoSerRemovida(Posicao& solo) override;
+    void serPodada() override;
 };
 
 
