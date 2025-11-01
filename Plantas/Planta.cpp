@@ -15,7 +15,6 @@ Beleza Planta::getBeleza() const { return beleza; }
 
 int Planta::getTempoVida() const { return tempoVida; }
 
-
 void Planta::incrementaInstantes() { tempoVida++; }
 
 
