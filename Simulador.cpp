@@ -22,6 +22,8 @@ void Simulador::iniciar() {
 
     std::cout << "Simulador iniciado!" << std::endl;
 
+    jardineiro = new Jardineiro();
+
     while (true) {
         Comando cmd = lerComando();
         if (!cmd.isValido()) {
@@ -51,7 +53,7 @@ void Simulador::executarComando(const Comando& cmd) {
     std::string comando = cmd.getComando();
     const std::vector<std::string>& p = cmd.getParametros();
 
-    if (comando == "jardim") {
+    if (comando == "jardim") {              //1º comando
         if (jardim == nullptr) {
             int linhas = std::stoi(p[0]);
             int colunas = std::stoi(p[1]);
@@ -68,12 +70,88 @@ void Simulador::executarComando(const Comando& cmd) {
     else if (jardim == nullptr) {
         std::cout << "Erro: O comando 'jardim <n> <n>' deve ser executado primeiro." << std::endl;
     }
+
+    //Comandos adicionais de caracter geral
+    else if (comando == "grava") {
+        std::cout << "A gravar o estado do jardim no ficheiro '" << p[0] << "'..." << std::endl;
+    }
+    else if (comando == "recupera") {
+        std::cout << "A recuperar o estado do jardim do ficheiro '" << p[0] << "'..." << std::endl;
+    }
+    else if (comando == "apaga") {
+        std::cout << "A apagar o ficheiro '" << p[0] << "'..." << std::endl;
+    }
+    else if (comando == "executa") {
+        std::cout << "A executar comandos do ficheiro '" << p[0] << "'..." << std::endl;
+    }
+
+    //Comandos para o movimento do jardineiro
+    else if (comando == "e") {
+        std::cout << "Jardineiro move-se uma posicao para a esquerda" << std::endl;
+    }
+    else if (comando == "d"){
+        std::cout << "Jardineiro move-se uma posicao para a direita" << std::endl;
+    }
+    else if (comando == "c"){
+        std::cout << "Jardineiro move-se uma posicao para cima" << std::endl;
+    }
+    else if (comando == "b"){
+        std::cout << "Jardineiro move-se uma posicao para baixo" << std::endl;
+    }
+    else if (comando == "entra") {
+        std::cout << "Jardineiro entra no jardim nas coordenadas(l,c) "<< p[0] << " " << p[1] << std::endl;         //ERRO NESTE COMANDO
+    }
+    else if (comando == "sai") {
+        std::cout << "Jardineiro sai do jardim" << std::endl;
+    }
+
+    //Comandos para acoes
+
+    else if (comando == "colhe") {
+        std::cout << "Jardineiro colhe na posicao(l.c) " << p[0]<< " "<< p[1] << std::endl;        //ERRO NESTE COMANDO
+    }
+    else if (comando == "planta") {
+        std::cout << "Jardineiro planta " << p[2] <<"na posicao(l.c) " << p[0]<< " "<< p[1] << std::endl;        //ERRO NESTE COMANDO
+    }
+    else if (comando == "larga") {
+        std:cout << "Jardineiro larga a ferramenta que esta' na sua mao" << std::endl;
+    }
+    else if (comando == "pega") {
+        std::cout << "Jardineiro pega na ferramenta" << std::endl;
+    }
+    else if (comando == "compra") {
+        std::cout << "Jardineiro compra uma ferramenta do tipo " << p[0] << std::endl;
+    }
+
+    //Comandos para lista informacao
+
+    else if (comando == "lplantas") {
+        std::cout << "Lista de todas as plantas do jardim" << std::endl;
+    }
+    else if (comando == "lplanta") {
+        std::cout << "Lista de informacao da planta na posicao(l.c) " << p[0]<< " "<< p[1] << std::endl;        //ERRO NESTE COMANDO
+    }
+    else if (comando == "larea") {
+        std::cout << "Informacao da area do jardim" << std::endl;
+    }
+    else if (comando == "lsolo") {
+            std::cout << "Informacao do solo na posicao(l.c) " << p[0]<< " "<< p[1] << std::endl;        //ERRO NESTE COMANDO
+    }
+    else if (comando == "lferr") {
+        std::cout << "Lista de todas as ferramentas do jardineiro" << std::endl;
+    }
+
+    //Comandos para o tempo simulado
+    else if (comando == "avanca") {
+        std::cout << "A avancar o tempo em " << p[0] << " passos..." << std::endl;      //ERRO ao tentar usar valor default
+    }
+
     else if (comando == "fim") {
         std::cout << "A encerrar o simulador..." << std::endl;
         exit(0);
     }
     else {
-        std::cout << "Comando '" << comando << "' válido, mas a funcionalidade não está implementada." << std::endl;
+        std::cout << "Comando '" << comando << "' valido, mas a funcionalidade nao esta implementada." << std::endl;
     }
 }
 
