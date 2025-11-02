@@ -25,6 +25,8 @@ void Tesoura::cortaPlanta(Posicao& pos) {
 
 }
 
+void Tesoura::aplica(Posicao& pos) {}
+
 Tesoura::~Tesoura() {
     std::cout << "Tesoura destruida!" << std::endl;
 }

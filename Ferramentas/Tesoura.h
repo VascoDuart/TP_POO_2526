@@ -16,6 +16,8 @@ public:
 
     void cortaPlanta(Posicao& pos);
 
+    void aplica(Posicao& pos) override;
+
     ~Tesoura();
 
 };
