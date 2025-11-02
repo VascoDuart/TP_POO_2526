@@ -4,7 +4,8 @@
 #include <iostream>
 #include <string>
 #include "../Settings.h"
-#include "../Posicao.h"
+
+class Posicao;
 
 
 enum class Beleza {

@@ -3,9 +3,8 @@
 
 
 #include "Plantas/Planta.h"
-#include "Ferramentas/Ferramenta.h"
 
-
+class Ferramenta;
 class Planta;
 
 class Posicao {

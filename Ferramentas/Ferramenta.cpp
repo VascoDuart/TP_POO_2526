@@ -14,3 +14,7 @@ Ferramenta::Ferramenta() {
 Ferramenta::~Ferramenta() {
     std::cout << "Ferramenta com numero de serie " << numSerie << " destruida." << std::endl;
 }
+
+void Ferramenta::aplica(Posicao& pos) {
+
+}
