@@ -165,16 +165,16 @@ void Simulador::executarComando(const Comando& cmd) {
     //Comandos para o tempo simulado
     else if (comando == "avanca") {
 
-        int numPassos = 1;
+        int numInstantes = 1;
 
         if (p.empty()) {
-            std::cout << "A avancar o tempo em 1 passo (default)..." << std::endl;
+            std::cout << "A avancar o tempo em 1 instante (default)..." << std::endl;
         } else {
             try {
-                numPassos = std::stoi(p[0]);
-                std::cout << "A avancar o tempo em " << numPassos << " passos..." << std::endl;
+                numInstantes = std::stoi(p[0]);
+                std::cout << "A avancar o tempo em " << numInstantes << " instantes..." << std::endl;
             } catch (const std::exception& e) {
-                std::cout << "Erro interno na conversão de passos." << std::endl;
+                std::cout << "Erro interno na conversão de instantes." << std::endl;
                 return;
             }
         }
