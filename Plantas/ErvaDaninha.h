@@ -12,7 +12,7 @@ public:
     ErvaDaninha();
 
     void passaInstante(Posicao& solo) override;
-    bool verificaMorte(const Posicao& solo) const override; // Depende do instantesVida
+    bool verificaMorte(const Posicao& solo) const override;
     Planta* tentaMultiplicar() override;
     void acaoAoSerRemovida(Posicao& solo) override;
     void serPodada() override;

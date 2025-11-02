@@ -3,3 +3,7 @@
 //
 
 #include "Jardineiro.h"
+
+Jardineiro::Jardineiro() {}
+
+Jardineiro::~Jardineiro() {}

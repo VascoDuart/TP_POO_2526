@@ -3,7 +3,9 @@
 
 
 #include "Plantas/Planta.h"
-#include "Ferramentas/Ferramenta.h"
+
+class Ferramenta;
+class Planta;
 
 class Posicao {
     int agua, nutrientes;
@@ -24,12 +26,12 @@ public:
     bool temPlanta() const;
     Planta* getPlanta() const;
     void setPlanta(Planta* p);
-    void removePlanta();
+    Planta* removePlanta();
 
     bool temFerramenta() const;
     Ferramenta* getFerramenta() const;
     void setFerramenta(Ferramenta* f);
-    void removeFerramenta();
+    Ferramenta* removeFerramenta();
 
 };
 

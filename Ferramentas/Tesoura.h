@@ -8,6 +8,7 @@
 
 #include "Ferramenta.h"
 #include "../Posicao.h"
+#include  "../Plantas/Planta.h"
 
 class Tesoura : public Ferramenta {
 public:
@@ -15,6 +16,9 @@ public:
 
     void cortaPlanta(Posicao& pos);
 
+    void aplica(Posicao& pos) override;
+
+    ~Tesoura();
 
 };
 

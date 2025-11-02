@@ -18,7 +18,7 @@ void Adubo::verificaCapacidade() const {
     }
 }
 
-void Adubo::aplicaNutrientes(Posicao pos) {
+void Adubo::aplica(Posicao& pos) {
     verificaCapacidade();
     if(capacidade>=dose){
         pos.adicionaNutrientes(dose);
@@ -28,8 +28,4 @@ void Adubo::aplicaNutrientes(Posicao pos) {
         std::cout << "Adubo sem capacidade suficiente para aplicar dose!" << std::endl;
     }
     verificaCapacidade();
-}
-
-Adubo::~Adubo() {
-    std::cout << "Adubo destruido" << std::endl;
 }

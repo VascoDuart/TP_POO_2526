@@ -14,11 +14,10 @@ class Adubo : public Ferramenta {
 public:
     Adubo();
     void verificaCapacidade() const;
-    void aplicaNutrientes(Posicao pos);
+    void aplica(Posicao& pos) override;
 
 
 
-    ~Adubo();
 
 private:
     int capacidade;

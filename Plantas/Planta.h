@@ -4,7 +4,9 @@
 #include <iostream>
 #include <string>
 #include "../Settings.h"
-#include "../Posicao.h"
+
+class Posicao;
+
 
 enum class Beleza {
     NEUTRA,
@@ -20,18 +22,18 @@ class Planta {
 
 public:
     Planta(int agua, int nutrientes, char tipo, Beleza belezaTipo);
-        : aguaInterna(agua), nutrientesInternos(nutrientes), tipoPlanta(tipo), beleza(belezaTipo), tempoVida(0) {};
 
-    virtual ~Planta() = default;
 
-    int getAguaInterna() const { return aguaInterna; }
-    char getTipoPlanta() const { return tipoPlanta; }
-    Beleza getBeleza() const { return beleza; }
-    int getTempoVida() const { return tempoVida; }
+    virtual ~Planta();
 
-    void incrementaInstantes() { tempoVida++; }
+    int getAguaInterna() const;
+    char getTipoPlanta() const;
+    Beleza getBeleza() const;
+    int getTempoVida() const;
+
+    void incrementaInstantes();
+
     virtual void passaInstante(Posicao& solo) = 0;
-
     virtual bool verificaMorte(const Posicao& solo) const = 0;
     virtual Planta* tentaMultiplicar() = 0;
     virtual void acaoAoSerRemovida(Posicao& solo) = 0;
