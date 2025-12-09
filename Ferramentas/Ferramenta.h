@@ -1,25 +1,26 @@
-//
-// Created by david on 24/10/2025.
-//
-
 #ifndef TP_POO_2526_FERRAMENTA_H
 #define TP_POO_2526_FERRAMENTA_H
+
 #include "string"
 #include <iostream>
 #include "../Posicao.h"
+#include "../Jardim.h"
 
 class Ferramenta {
+private:
+    static int contador;
+    int numSerie;
+
 public:
-
     Ferramenta();
-
-    virtual void aplica(Posicao& pos);
 
     virtual ~Ferramenta();
 
-private:
-    static int numSerie;
+    int getNumSerie() const;
 
+    virtual bool usarFerramenta(Posicao& pos, Jardim& j, int l, int c) = 0;
+    virtual char getTipoFerramenta() const = 0;
+    virtual Ferramenta* clona() const = 0;
 };
 
 
