@@ -12,6 +12,8 @@ bool Tesoura::usarFerramenta(Posicao &pos, Jardim &j, int l, int c) {
     if (pos.temPlanta()) {
         Planta* p = pos.getPlanta();
 
+        p->serPodada();
+
         if(p->getBeleza() == Beleza::FEIA){
             std::cout << "A tesoura removeu a planta feia na posicao " << (char)('a'+l) << (char)('a'+c) << " (ID: " << getNumSerie() << ")" << std::endl;
             p->acaoAoSerRemovida(pos);

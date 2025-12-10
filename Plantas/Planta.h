@@ -15,10 +15,13 @@ enum class Beleza {
 };
 
 class Planta {
-    int aguaInterna, nutrientesInternos;
+private:
     char tipoPlanta;
     Beleza beleza;
     int tempoVida;
+
+protected:
+    int aguaInterna, nutrientesInternos;
 
 public:
     Planta(int agua, int nutrientes, char tipo, Beleza belezaTipo);
@@ -38,6 +41,7 @@ public:
     virtual Planta* tentaMultiplicar() = 0;
     virtual void acaoAoSerRemovida(Posicao& solo) = 0;
     virtual void serPodada() = 0;
+    virtual Planta* clona() const = 0;
 };
 
 
