@@ -1,32 +1,35 @@
-//
-// Created by david on 24/10/2025.
-//
-
 #include "Tesoura.h"
 
 Tesoura::Tesoura() : Ferramenta() {
     std::cout << "Tesoura criada!" << std::endl;
 }
 
-void Tesoura::cortaPlanta(Posicao& pos) {
-
-    if (!pos.temPlanta()) {
-        std::cout << "Nao ha planta para cortar nesta posicao!" << std::endl;
-        return;
-    }
-
-    Planta* p = pos.getPlanta();
-
-    if(p->getBeleza() == Beleza::FEIA){
-        p->acaoAoSerRemovida(pos);
-        pos.removePlanta();
-        std::cout << "Planta feia cortada e removida do jardim!" << std::endl;
-    }
-
-}
-
-void Tesoura::aplica(Posicao& pos) {}
-
 Tesoura::~Tesoura() {
     std::cout << "Tesoura destruida!" << std::endl;
+}
+
+bool Tesoura::usarFerramenta(Posicao &pos, Jardim &j, int l, int c) {
+    if (pos.temPlanta()) {
+        Planta* p = pos.getPlanta();
+
+        if(p->getBeleza() == Beleza::FEIA){
+            std::cout << "A tesoura removeu a planta feia na posicao " << (char)('a'+l) << (char)('a'+c) << " (ID: " << getNumSerie() << ")" << std::endl;
+            p->acaoAoSerRemovida(pos);
+            Planta* plantaRemovida = pos.removePlanta();
+            delete plantaRemovida;
+        } else {
+            std::cout << "A planta na posicao " << (char)('a'+l) << (char)('a'+c) << " nao e feia. A tesoura nao pode remover." << std::endl;
+        }
+    } else {
+        std::cout << "Nao ha planta para cortar nesta posicao!" << std::endl;
+    }
+    return false;
+}
+
+char Tesoura::getTipoFerramenta() const {
+    return 't';
+}
+
+Ferramenta *Tesoura::clona() const {
+    return new Tesoura(*this);
 }

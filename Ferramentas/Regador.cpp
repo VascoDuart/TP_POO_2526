@@ -1,32 +1,37 @@
-//
-// Created by david on 24/10/2025.
-//
-
 #include "Regador.h"
 
-
 Regador::Regador() : Ferramenta() {
- capacidade = Settings::Regador::capacidade;
+    capacidade = Settings::Regador::capacidade;
 }
 
-
-void Regador::verificaCapacidade() const {
-    if(capacidade<=0){
-        std::cout << "Regador sem capacidade!" << std::endl;
-        Regador::~Regador();
-    } else {
-        std::cout << "Regador com "<< capacidade <<" capacidade!" << std::endl;
-    }
+Regador::~Regador() {
+    std::cout << "Regador destruido!" << std::endl;
 }
 
-void Regador::aplica(Posicao& pos) {
-    verificaCapacidade();
-    if(capacidade>=dose){
+bool Regador::usarFerramenta(Posicao &pos, Jardim &j, int l, int c) {
+    if (capacidade >= dose) {
         pos.adicionaAgua(dose);
         capacidade -= dose;
-        std::cout << "Regador aplicado com sucesso! Capacidade restante: " << capacidade << std::endl;
+        std::cout << "Regador aplicado! Adicionadas " << dose << " unidades de agua. Capacidade restante: " << capacidade << std::endl;
     } else {
-        std::cout << "Regador sem capacidade suficiente para aplicar dose!" << std::endl;
+        std::cout << "Regador vazio (ID: " << getNumSerie() << "). Nao foi possivel aplicar a dose de agua." << std::endl;
     }
-    verificaCapacidade();
+
+    if (capacidade <= 0) {
+        std::cout << "O regador esgotou! Sera descartado." << std::endl;
+        return true;
+    }
+
+    return false;
 }
+
+char Regador::getTipoFerramenta() const {
+    return 'g';
+}
+
+Ferramenta *Regador::clona() const {
+    Regador* novo = new Regador();
+    novo->capacidade = this->capacidade;
+    return novo;
+}
+
