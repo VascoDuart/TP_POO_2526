@@ -12,27 +12,27 @@ void Cacto::passaInstante(Posicao& solo) {
     incrementaInstantes();
 
     int aguaSoloAntes = solo.getAgua();
-    int aguaAbsorver = aguaSoloAntes * 25 / 100;
+    int aguaAbsorver = aguaSoloAntes * Settings::Cacto::absorcao_agua_percentagem / 100;
     solo.retiraAgua(aguaAbsorver);
     int aguaSoloDepois = solo.getAgua();
     int aguaRetiradaReal = aguaSoloAntes - aguaSoloDepois;
     aguaInterna += aguaRetiradaReal;
 
     int nutrientesSoloAntes = solo.getNutrientes();
-    int nutrientesAbsorver = 5;
+    int nutrientesAbsorver = Settings::Cacto::absorcao_nutrientes;
     solo.retiraNutrientes(nutrientesAbsorver);
     int nutrientesSoloDepois = solo.getNutrientes();
     int nutrientesRetiradosReal = nutrientesSoloAntes - nutrientesSoloDepois;
     nutrientesInternos += nutrientesRetiradosReal;
     nutrientesAbsorvidosTotal += nutrientesRetiradosReal;
 
-    if (solo.getAgua() > 100) {
+    if (solo.getAgua() > Settings::Cacto::morre_agua_solo_maior) {
         instantesMtAgua++;
     } else {
         instantesMtAgua = 0;
     }
 
-    if (solo.getNutrientes() <= 0) {
+    if (solo.getNutrientes() <= Settings::Cacto::morre_nutrientes_solo_menor) {
         instantesSemNutrientes++;
     } else {
         instantesSemNutrientes = 0;

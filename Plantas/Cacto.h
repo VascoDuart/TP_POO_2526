@@ -6,6 +6,7 @@
 #include "../Posicao.h"
 
 class Cacto : public Planta {
+private:
     int instantesMtAgua;
     int instantesSemNutrientes;
     int nutrientesAbsorvidosTotal;
