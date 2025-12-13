@@ -4,6 +4,10 @@ Adubo::Adubo() : Ferramenta() {
     capacidade = Settings::Adubo::capacidade;
 }
 
+Adubo::~Adubo() {
+    std::cout << "Adubo destruido!" << std::endl;
+}
+
 bool Adubo::usarFerramenta(Posicao &pos, Jardim &j, int l, int c) {
     if (capacidade >= dose) {
         pos.adicionaNutrientes(dose);
