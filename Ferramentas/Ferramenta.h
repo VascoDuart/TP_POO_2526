@@ -4,7 +4,7 @@
 #include "string"
 #include <iostream>
 #include "../Posicao.h"
-#include "../Jardim.h"
+class Jardim;
 
 class Ferramenta {
 private:

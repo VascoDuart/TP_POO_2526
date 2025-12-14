@@ -2,6 +2,8 @@
 #define TP_POO_2526_JARDIM_H
 
 #include "Posicao.h"
+#include "Plantas/Roseira.h"
+#include "Ferramentas/Ferramenta.h"
 
 class Jardim {
     Posicao** grelha;
@@ -15,8 +17,10 @@ public:
 
     int getNumLinhas() const { return numLinhas; }
     int getNumColunas() const { return numColunas; }
-    const Posicao& getPosicao(int linha, int coluna) const;
+    Posicao& getPosicao(int linha, int coluna) const;
     bool ePosicaoValida(int linha, int coluna) const;
+    bool estaRodeada(int linha, int coluna) const;
+    Posicao *encontraVizinhoMultiplicacao(int l, int c, bool &temPlantaVizinha);
 
     void adicionaObjeto(int linha, int coluna, Planta* p);
     void adicionaObjeto(int linha, int coluna, Ferramenta* f);
