@@ -1,6 +1,13 @@
 #include <ctime>
 #include <cstdlib>
 #include "Simulador.h"
+#include "Plantas/Cacto.h"
+#include "Plantas/Roseira.h"
+#include "Plantas/ErvaDaninha.h"
+#include "Plantas/PlantaExotica.h"
+#include "Ferramentas/Regador.h"
+#include "Ferramentas/Adubo.h"
+#include "Ferramentas/Tesoura.h"
 
 Simulador::Simulador()
     : jardim(nullptr), jardineiro(nullptr), interfaceGrelha(nullptr), instanteAtual(0)
@@ -17,8 +24,6 @@ void Simulador::iniciar() {
     std::srand(std::time(0));
 
     std::cout << "Simulador iniciado!" << std::endl;
-
-    jardineiro = new Jardineiro();
 
     while (true) {
         Comando cmd = lerComando();
@@ -42,6 +47,13 @@ static std::string toLower(const std::string& s) {
     std::string out = s;
     std::transform(out.begin(), out.end(), out.begin(), ::tolower);
     return out;
+}
+
+std::pair<int, int> comandoParaCoordenadas(const std::string& pos) {
+    if (pos.length() != 2) return {-1, -1};
+    int linha = tolower(pos[0]) - 'a';
+    int coluna = tolower(pos[1]) - 'a';
+    return {linha, coluna};
 }
 
 void Simulador::executarComando(const Comando& cmd) {
@@ -87,28 +99,57 @@ void Simulador::executarComando(const Comando& cmd) {
 
     //Comandos para o movimento do jardineiro
     else if (comando == "e") {
-        std::cout << "Jardineiro move-se uma posicao para a esquerda" << std::endl;
-        estadoAlterado = true;
+        if (jardineiro->move('e', *jardim)) {
+            std::cout << "Jardineiro moveu-se para a esquerda." << std::endl;
+            estadoAlterado = true;
+        } else {
+            std::cout << "Erro: Nao foi possivel mover para a esquerda." << std::endl;
+        }
     }
     else if (comando == "d"){
-        std::cout << "Jardineiro move-se uma posicao para a direita" << std::endl;
-        estadoAlterado = true;
+        if (jardineiro->move('d', *jardim)) {
+            std::cout << "Jardineiro moveu-se para a direita." << std::endl;
+            estadoAlterado = true;
+        } else {
+            std::cout << "Erro: Nao foi possivel mover para a direita." << std::endl;
+        }
     }
     else if (comando == "c"){
-        std::cout << "Jardineiro move-se uma posicao para cima" << std::endl;
-        estadoAlterado = true;
+        if (jardineiro->move('c', *jardim)) {
+            std::cout << "Jardineiro moveu-se para cima." << std::endl;
+            estadoAlterado = true;
+        } else {
+            std::cout << "Erro: Nao foi possivel mover para cima." << std::endl;
+        }
     }
     else if (comando == "b"){
-        std::cout << "Jardineiro move-se uma posicao para baixo" << std::endl;
-        estadoAlterado = true;
+        if (jardineiro->move('b', *jardim)) {
+            std::cout << "Jardineiro moveu-se para baixo." << std::endl;
+            estadoAlterado = true;
+        } else {
+            std::cout << "Erro: Nao foi possivel mover para baixo." << std::endl;
+        }
     }
     else if (comando == "entra") {
-        std::cout << "Jardineiro entra no jardim nas coordenadas " << p[0] << std::endl;
-        estadoAlterado = true;
+        std::pair<int, int> coords = comandoParaCoordenadas(p[0]);
+        int l = coords.first;
+        int c = coords.second;
+
+        if (jardineiro->entraNoJardim(l, c, *jardim)) {
+            std::cout << "Jardineiro entrou no jardim nas coordenadas " << p[0] << std::endl;
+            estadoAlterado = true;
+
+        } else {
+            std::cout << "Erro: Nao foi possivel entrar no jardim na posicao " << p[0] << ". (Verifique os limites, se ja esta dentro, ou se tem acoes de entrada)." << std::endl;
+        }
     }
     else if (comando == "sai") {
-        std::cout << "Jardineiro sai do jardim" << std::endl;
-        estadoAlterado = true;
+        if (jardineiro->saiDoJardim()) {
+            std::cout << "Jardineiro saiu do jardim" << std::endl;
+            estadoAlterado = true;
+        } else {
+            std::cout << "Erro: Nao foi possivel sair do jardim. (Verifique se ja esta fora ou se atingiu o limite de acoes)." << std::endl;
+        }
     }
 
     //Comandos para acoes
@@ -118,11 +159,35 @@ void Simulador::executarComando(const Comando& cmd) {
         estadoAlterado = true;
     }
     else if (comando == "planta") {
-        std::cout << "Jardineiro planta " << p[1] <<" na posicao " << p[0] << std::endl;
-        estadoAlterado = true;
+
+        std::pair<int, int> coords = comandoParaCoordenadas(p[0]);
+        int l = coords.first;
+        int c = coords.second;
+        char tipo = tolower(p[1][0]);
+
+        if (!jardim->ePosicaoValida(l, c)) {
+            std::cout << "Erro: Posicao '" << p[0] << "' fora dos limites do jardim." << std::endl;
+            return;
+        }
+
+        Planta* novaPlanta = nullptr;
+
+        switch(tipo) {
+            case 'c': novaPlanta = new Cacto(); break;
+            case 'r': novaPlanta = new Roseira(); break;
+            case 'e': novaPlanta = new ErvaDaninha(); break;
+            //case 'x': novaPlanta = new PlantaExotica(); break;
+        }
+
+        if (novaPlanta != nullptr) {
+            jardim->adicionaObjeto(l, c, novaPlanta);
+            jardineiro->planta(*jardim, tipo);
+            std::cout << "Jardineiro planta " << p[1] <<" na posicao " << p[0] << std::endl;
+            estadoAlterado = true;
+        }
     }
     else if (comando == "larga") {
-        std:cout << "Jardineiro larga a ferramenta que esta' na sua mao" << std::endl;
+        std::cout << "Jardineiro larga a ferramenta que esta' na sua mao" << std::endl;
         estadoAlterado = true;
     }
     else if (comando == "pega") {
@@ -130,8 +195,23 @@ void Simulador::executarComando(const Comando& cmd) {
         estadoAlterado = true;
     }
     else if (comando == "compra") {
-        std::cout << "Jardineiro compra uma ferramenta do tipo " << p[0] << std::endl;
-        estadoAlterado = true;
+        char tipo = tolower(p[0][0]);
+        Ferramenta* novaFerramenta = nullptr;
+
+        switch (tipo) {
+            case 'g': novaFerramenta = new Regador(); break;
+            case 'a': novaFerramenta = new Adubo(); break;
+            case 't': novaFerramenta = new Tesoura(); break;
+            case 'z':
+                std::cout << "Ferramenta 'Z' nao implementada." << std::endl;
+                return;
+        }
+
+        if (novaFerramenta != nullptr) {
+            jardineiro->pegaFerramenta(novaFerramenta);
+            std::cout << "Jardineiro compra uma ferramenta do tipo " << p[0] << " (ID: " << novaFerramenta->getNumSerie() << ")." << std::endl;
+            estadoAlterado = true;
+        }
     }
 
     //Comandos para lista informacao
@@ -147,15 +227,34 @@ void Simulador::executarComando(const Comando& cmd) {
     }
     else if (comando == "lsolo") {
 
-        std::cout << "--- Informacao do Solo ---" << std::endl;
-        std::cout << "Posicao (l.c): " << p[0];
+        std::pair<int, int> coords = comandoParaCoordenadas(p[0]);
+        int l = coords.first;
+        int c = coords.second;
 
-        if (p.size() == 2) {
-            std::cout << " (com area: " << p[1] << ")";
+        if (!jardim->ePosicaoValida(l, c)) {
+            std::cout << "Erro: Posicao '" << p[0] << "' fora dos limites do jardim." << std::endl;
+            return;
         }
 
-        std::cout << std::endl;
+        const Posicao& pos = jardim->getPosicao(l, c);
 
+        std::cout << "--- Informacao do Solo (" << p[0] << ") ---" << std::endl;
+        std::cout << "Agua: " << pos.getAgua() << std::endl;
+        std::cout << "Nutrientes: " << pos.getNutrientes() << std::endl;
+
+        if (pos.temPlanta()) {
+            Planta* planta = pos.getPlanta();
+            std::cout << "Planta presente (Tipo: " << planta->getTipoPlanta()
+                      << ", Beleza: " << (int)planta->getBeleza()
+                      << ", Tempo de Vida: " << planta->getTempoVida() << " instantes)" << std::endl;
+        }
+        if (pos.temFerramenta()) {
+            Ferramenta* ferramenta = pos.getFerramenta();
+            std::cout << "Ferramenta presente (Tipo: " << ferramenta->getTipoFerramenta()
+                      << ", ID: " << ferramenta->getNumSerie() << ")" << std::endl;
+        }
+
+        // Lógica de lsolo com área (p[1]) não implementada.
         return;
     }
     else if (comando == "lferr") {
@@ -178,6 +277,9 @@ void Simulador::executarComando(const Comando& cmd) {
                 return;
             }
         }
+
+        avancarInstante(numInstantes);
+
         estadoAlterado = true;
     }
 
@@ -191,6 +293,16 @@ void Simulador::executarComando(const Comando& cmd) {
 
     if (jardim != nullptr && interfaceGrelha != nullptr && estadoAlterado) {
         interfaceGrelha->desenharJardim();
+    }
+}
+
+void Simulador::avancarInstante(int numInstantes) {
+    for (int i = 0; i < numInstantes; ++i) {
+        jardim->passaInstante();
+
+        instanteAtual++;
+
+        jardineiro->resetContadoresAcoes();
     }
 }
 

@@ -11,16 +11,6 @@
 
 class Simulador {
 private:
-
-
-public:
-    Simulador();
-    ~Simulador();
-
-    void iniciar();
-
-private:
-
     Jardim* jardim;
     Jardineiro* jardineiro;
     InterfaceGrelha* interfaceGrelha;
@@ -28,10 +18,14 @@ private:
     int instanteAtual;
 
     Comando lerComando() const;
-
     void executarComando(const Comando& cmd);
-
     void avancarInstante(int numInstantes);
+
+public:
+    Simulador();
+    ~Simulador();
+
+    void iniciar();
 };
 
 #endif // SIMULADOR_H
