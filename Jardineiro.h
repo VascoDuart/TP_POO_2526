@@ -4,11 +4,14 @@
 #include <iostream>
 #include <vector>
 #include "Ferramentas/Ferramenta.h"
+#include "Plantas/Planta.h"
+#include "Posicao.h"
 #include "Jardim.h"
 
 using namespace std;
 
 class Jardineiro {
+private:
     bool presenteNoJardim;
     int linha;
     int coluna;
@@ -23,6 +26,7 @@ class Jardineiro {
 
 public:
     Jardineiro();
+    ~Jardineiro();
 
     bool move(char direcao, const Jardim& j);
     bool entraNoJardim(int l, int c, const Jardim& j);
@@ -38,8 +42,6 @@ public:
     bool estaPresente() const { return presenteNoJardim; }
     int getLinha() const { return linha; }
     int getColuna() const { return coluna; }
-
-    ~Jardineiro();
 };
 
 

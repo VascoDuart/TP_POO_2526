@@ -155,6 +155,7 @@ void Simulador::executarComando(const Comando& cmd) {
     //Comandos para acoes
 
     else if (comando == "colhe") {
+        jardineiro->colhe(*jardim);
         std::cout << "Jardineiro colhe na posicao " << p[0] << std::endl;
         estadoAlterado = true;
     }
