@@ -237,7 +237,32 @@ void Simulador::executarComando(const Comando& cmd) {
         std::cout << "Lista de todas as plantas do jardim" << std::endl;
     }
     else if (comando == "lplanta") {
-        std::cout << "Lista de informacao da planta na posicao " << p[0] << std::endl;
+        std::pair<int, int> coords = comandoParaCoordenadas(p[0]);
+        int l = coords.first;
+        int c = coords.second;
+
+        if (!jardim->ePosicaoValida(l, c)) {
+            std::cout << "Erro: Posicao '" << p[0] << "' fora dos limites do jardim." << std::endl;
+            return;
+        }
+
+        const Posicao& pos = jardim->getPosicao(l, c);
+
+        if (!pos.temPlanta()) {
+            std::cout << "Erro: Nao existe planta na posicao '" << p[0] << "'." << std::endl;
+            return;
+        }
+
+        Planta* planta = pos.getPlanta();
+
+        std::cout << "--- Informacao da Planta em '" << p[0] << "' ---" << std::endl;
+        std::cout << "Tipo: " << planta->getTipoPlanta() << std::endl;
+        std::cout << "Tempo de Vida: " << planta->getTempoVida() << " instantes" << std::endl;
+        std::cout << "Beleza: " << (int)planta->getBeleza() << std::endl;
+        std::cout << "Agua Interna: " << planta->getAguaInterna() << std::endl;
+        std::cout << "Nutrientes Internos: " << planta->getNutrientesInternos() << std::endl;
+
+        return;
     }
     else if (comando == "larea") {
         std::cout << "Informacao da area do jardim" << std::endl;
@@ -289,7 +314,7 @@ void Simulador::executarComando(const Comando& cmd) {
                     char coord_c = (char)('A' + c);
 
                     std::cout << "\n[Posicao " << coord_l << coord_c << "]:" << std::endl;
-                    std::cout << "  Agua: " << pos.getAgua();
+                    std::cout << "Agua: " << pos.getAgua();
                     std::cout << " | Nutrientes: " << pos.getNutrientes();
 
                     if (pos.temPlanta()) {

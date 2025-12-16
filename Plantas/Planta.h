@@ -30,6 +30,7 @@ public:
     virtual ~Planta();
 
     int getAguaInterna() const;
+    int getNutrientesInternos() const;
     char getTipoPlanta() const;
     Beleza getBeleza() const;
     int getTempoVida() const;
