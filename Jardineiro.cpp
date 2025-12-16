@@ -25,17 +25,19 @@ void Jardineiro::resetContadoresAcoes() {
 }
 
 bool Jardineiro::entraNoJardim(int l, int c, const Jardim &j) {
-    if (presenteNoJardim) {
-        std::cout << "Aviso: O jardineiro ja esta no jardim." << std::endl;
+    if (!j.ePosicaoValida(l, c)) {
         return false;
+    }
+
+    if (presenteNoJardim) {
+        linha = l;
+        coluna = c;
+
+        return true;
     }
 
     if (entrouNesteInstante) {
         std::cout << "Aviso: O jardineiro ja entrou neste instante (limite: 1)." << std::endl;
-        return false;
-    }
-
-    if (!j.ePosicaoValida(l, c)) {
         return false;
     }
 

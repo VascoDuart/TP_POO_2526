@@ -171,6 +171,22 @@ void Simulador::executarComando(const Comando& cmd) {
             return;
         }
 
+        const Posicao& pos = jardim->getPosicao(l, c);
+        if (pos.temPlanta()) {
+            std::cout << "Erro: Ja existe uma planta (" << pos.getPlanta()->getTipoPlanta() << ") na posicao " << p[0] << "." << std::endl;
+            return;
+        }
+
+        if (pos.temFerramenta()) {
+            std::cout << "Erro: Nao e possivel plantar. A posicao " << p[0] << " ja contem uma ferramenta." << std::endl;
+            return;
+        }
+
+        if (jardineiro->getPlantacoesRestantes() <= 0) {
+            std::cout << "Erro: Jardineiro nao tem acoes de plantacao restantes neste instante." << std::endl;
+            return;
+        }
+
         Planta* novaPlanta = nullptr;
 
         switch(tipo) {
@@ -227,35 +243,68 @@ void Simulador::executarComando(const Comando& cmd) {
         std::cout << "Informacao da area do jardim" << std::endl;
     }
     else if (comando == "lsolo") {
-
         std::pair<int, int> coords = comandoParaCoordenadas(p[0]);
-        int l = coords.first;
-        int c = coords.second;
+        int l_centro = coords.first;
+        int c_centro = coords.second;
 
-        if (!jardim->ePosicaoValida(l, c)) {
-            std::cout << "Erro: Posicao '" << p[0] << "' fora dos limites do jardim." << std::endl;
+        if (!jardim->ePosicaoValida(l_centro, c_centro)) {
+            std::cout << "Erro: Posicao central '" << p[0] << "' fora dos limites do jardim." << std::endl;
             return;
         }
 
-        const Posicao& pos = jardim->getPosicao(l, c);
+        int raio = 0;
+        bool area_mode = false;
 
-        std::cout << "--- Informacao do Solo (" << p[0] << ") ---" << std::endl;
-        std::cout << "Agua: " << pos.getAgua() << std::endl;
-        std::cout << "Nutrientes: " << pos.getNutrientes() << std::endl;
-
-        if (pos.temPlanta()) {
-            Planta* planta = pos.getPlanta();
-            std::cout << "Planta presente (Tipo: " << planta->getTipoPlanta()
-                      << ", Beleza: " << (int)planta->getBeleza()
-                      << ", Tempo de Vida: " << planta->getTempoVida() << " instantes)" << std::endl;
+        if (p.size() > 1) {
+            try {
+                raio = std::stoi(p[1]);
+                if (raio < 0) {
+                    std::cout << "Aviso: O raio nao pode ser negativo. Usando 0." << std::endl;
+                    raio = 0;
+                }
+                if (raio > 0) {
+                    area_mode = true;
+                }
+            } catch (const std::exception& e) {
+                std::cout << "Aviso: Parametro de area invalido. Ignorando area." << std::endl;
+            }
         }
-        if (pos.temFerramenta()) {
-            Ferramenta* ferramenta = pos.getFerramenta();
-            std::cout << "Ferramenta presente (Tipo: " << ferramenta->getTipoFerramenta()
-                      << ", ID: " << ferramenta->getNumSerie() << ")" << std::endl;
+
+        int l_min = l_centro - raio;
+        int l_max = l_centro + raio;
+        int c_min = c_centro - raio;
+        int c_max = c_centro + raio;
+
+        if (area_mode) {
+            std::cout << "--- Informacao do Solo na Area (" << p[0] << ", Raio: " << raio << ") ---" << std::endl;
         }
 
-        // Lógica de lsolo com área (p[1]) não implementada.
+        for (int l = l_min; l <= l_max; ++l) {
+            for (int c = c_min; c <= c_max; ++c) {
+
+                if (jardim->ePosicaoValida(l, c)) {
+                    const Posicao& pos = jardim->getPosicao(l, c);
+
+                    char coord_l = (char)('A' + l);
+                    char coord_c = (char)('A' + c);
+
+                    std::cout << "\n[Posicao " << coord_l << coord_c << "]:" << std::endl;
+                    std::cout << "  Agua: " << pos.getAgua();
+                    std::cout << " | Nutrientes: " << pos.getNutrientes();
+
+                    if (pos.temPlanta()) {
+                        std::cout << " | Planta: " << pos.getPlanta()->getTipoPlanta()
+                                  << " (Beleza: " << (int)pos.getPlanta()->getBeleza() << ")";
+                    }
+                    if (pos.temFerramenta()) {
+                        std::cout << " | Ferramenta: " << pos.getFerramenta()->getTipoFerramenta();
+                    }
+                    std::cout << std::endl;
+
+                } else if (area_mode) {
+                }
+            }
+        }
         return;
     }
     else if (comando == "lferr") {

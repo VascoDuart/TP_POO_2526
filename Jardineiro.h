@@ -37,11 +37,12 @@ public:
     void colhe(Jardim& j);
     void pegaFerramenta(Ferramenta* f);
 
-    void resetContadoresAcoes(); // Chamado no início de cada instante
+    void resetContadoresAcoes();
 
     bool estaPresente() const { return presenteNoJardim; }
     int getLinha() const { return linha; }
     int getColuna() const { return coluna; }
+    int getPlantacoesRestantes() const { return plantasRestantes; }
 };
 
 
