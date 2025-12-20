@@ -234,7 +234,46 @@ void Simulador::executarComando(const Comando& cmd) {
     //Comandos para lista informacao
 
     else if (comando == "lplantas") {
-        std::cout << "Lista de todas as plantas do jardim" << std::endl;
+        int linhas = jardim->getNumLinhas();
+        int colunas = jardim->getNumColunas();
+        bool encontrouPlantas = false;
+
+        std::cout << "--- Listagem Detalhada de Todas as Plantas no Jardim ---" << std::endl;
+
+        for (int i = 0; i < linhas; ++i) {
+            for (int k = 0; k < colunas; ++k) {
+                const Posicao& pos = jardim->getPosicao(i, k);
+
+                if (pos.temPlanta()) {
+                    encontrouPlantas = true;
+                    Planta* p = pos.getPlanta();
+
+                    char coord_l = (char)('A' + i);
+                    char coord_c = (char)('A' + k);
+
+                    std::cout << "Posicao [" << coord_l << coord_c << "]:" << std::endl;
+
+                    std::cout << "  > Planta: " << p->getTipoPlanta() << std::endl;
+                    std::cout << "    Propriedades Internas: "
+                              << "Agua: " << p->getAguaInterna()
+                              << " | Nutrientes: " << p->getNutrientesInternos()
+                              << " | Beleza: " << (int)p->getBeleza()
+                              << " | Vida: " << p->getTempoVida() << "i" << std::endl;
+
+                    std::cout << "    Propriedades do Solo:     "
+                              << "Agua: " << pos.getAgua()
+                              << " | Nutrientes: " << pos.getNutrientes() << std::endl;
+
+                    std::cout << "  -------------------------------------------------" << std::endl;
+                }
+            }
+        }
+
+        if (!encontrouPlantas) {
+            std::cout << "Nao foram encontradas plantas no jardim." << std::endl;
+        }
+
+        return;
     }
     else if (comando == "lplanta") {
         std::pair<int, int> coords = comandoParaCoordenadas(p[0]);
@@ -265,7 +304,56 @@ void Simulador::executarComando(const Comando& cmd) {
         return;
     }
     else if (comando == "larea") {
-        std::cout << "Informacao da area do jardim" << std::endl;
+        int linhas = jardim->getNumLinhas();
+        int colunas = jardim->getNumColunas();
+        bool encontrouAlgo = false;
+
+        std::cout << "--- Listagem de Posicoes Ocupadas no Jardim ---" << std::endl;
+
+        for (int i = 0; i < linhas; ++i) {
+            for (int k = 0; k < colunas; ++k) {
+                const Posicao& pos = jardim->getPosicao(i, k);
+
+                bool temJardineiro = (jardineiro->estaPresente() &&
+                                      jardineiro->getLinha() == i &&
+                                      jardineiro->getColuna() == k);
+
+                if (pos.temPlanta() || pos.temFerramenta() || temJardineiro) {
+                    encontrouAlgo = true;
+
+                    char coord_l = (char)('A' + i);
+                    char coord_c = (char)('A' + k);
+
+                    std::cout << "[" << coord_l << coord_c << "]: ";
+
+                    if (temJardineiro) {
+                        std::cout << "Jardineiro presente! ";
+                    }
+
+                    if (pos.temPlanta()) {
+                        Planta* p = pos.getPlanta();
+                        std::cout << "Planta: " << p->getTipoPlanta()
+                                  << " (Vida: " << p->getTempoVida()
+                                  << "i, B: " << (int)p->getBeleza() << ") ";
+                    }
+
+                    if (pos.temFerramenta()) {
+                        Ferramenta* f = pos.getFerramenta();
+                        std::cout << "Ferramenta: " << f->getTipoFerramenta()
+                                  << " (ID: " << f->getNumSerie() << ") ";
+                    }
+
+                    std::cout << "| Solo -> Agua: " << pos.getAgua()
+                              << ", Nutrientes: " << pos.getNutrientes() << std::endl;
+                }
+            }
+        }
+
+        if (!encontrouAlgo) {
+            std::cout << "O jardim esta totalmente vazio de objetos." << std::endl;
+        }
+
+        return;
     }
     else if (comando == "lsolo") {
         std::pair<int, int> coords = comandoParaCoordenadas(p[0]);
