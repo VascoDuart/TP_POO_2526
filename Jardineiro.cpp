@@ -199,3 +199,24 @@ void Jardineiro::usaFerramenta(Jardim &j) {
         std::cout << "Ferramenta ID " << ferramentaNaMao->getNumSerie() << " utilizada com sucesso." << std::endl;
     }
 }
+
+Jardineiro* Jardineiro::clona() const {
+    Jardineiro* novoJardineiro = new Jardineiro();
+    novoJardineiro->presenteNoJardim = this->presenteNoJardim;
+    novoJardineiro->linha = this->linha;
+    novoJardineiro->coluna = this->coluna;
+    novoJardineiro->movimentosRestantes = this->movimentosRestantes;
+    novoJardineiro->colheitasRestantes = this->colheitasRestantes;
+    novoJardineiro->plantasRestantes = this->plantasRestantes;
+    novoJardineiro->entrouNesteInstante = this->entrouNesteInstante;
+    novoJardineiro->saiuNesteInstante = this->saiuNesteInstante;
+    for (Ferramenta* f : this->inventario) {
+        novoJardineiro->inventario.push_back(f->clona());
+    }
+    if (this->ferramentaNaMao != nullptr) {
+        novoJardineiro->ferramentaNaMao = this->ferramentaNaMao->clona();
+    } else {
+        novoJardineiro->ferramentaNaMao = nullptr;
+    }
+}
+

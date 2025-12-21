@@ -1,6 +1,8 @@
 #ifndef SIMULADOR_H
 #define SIMULADOR_H
 
+#include <map>
+
 #include "Jardim.h"
 #include "Jardineiro.h"
 #include "InterfaceGrelha.h"
@@ -14,6 +16,7 @@ private:
     Jardim* jardim;
     Jardineiro* jardineiro;
     InterfaceGrelha* interfaceGrelha;
+    map<string,Jardim*> copiasJardins;
 
     int instanteAtual;
 

@@ -84,14 +84,39 @@ void Simulador::executarComando(const Comando& cmd) {
     //Comandos adicionais de caracter geral
     else if (comando == "grava") {
         std::cout << "A gravar o estado do jardim no ficheiro '" << p[0] << "'..." << std::endl;
+        std::string nome = p[0];
+        copiasJardins[nome]= jardim->clona();
+        std::cout << "Jardim '" << nome << "' guardado com sucesso." << std::endl;
         estadoAlterado = true;
     }
     else if (comando == "recupera") {
         std::cout << "A recuperar o estado do jardim do ficheiro '" << p[0] << "'..." << std::endl;
-        estadoAlterado = true;
+        std::string nome = p[0];
+        if (copiasJardins.count(nome)) {    //talvez trocar para contains
+            delete jardim;
+            jardim = copiasJardins[nome];
+            copiasJardins.erase(nome);
+
+            delete interfaceGrelha;
+            interfaceGrelha = new InterfaceGrelha(*jardim, *jardineiro);
+            std::cout << "Jardim '" << nome << "' recuperado com sucesso." << std::endl;
+            estadoAlterado = true;
+        }
+        else
+            std::cout << "Erro: Nao foi possivel encontrar o ficheiro '" << nome << "'." << std::endl;
     }
     else if (comando == "apaga") {
         std::cout << "A apagar o ficheiro '" << p[0] << "'..." << std::endl;
+        string nome = p[0];
+        if (copiasJardins.count(nome)) {
+            delete copiasJardins[nome];
+            copiasJardins.erase(nome);
+            std::cout << "Ficheiro '" << nome << "' apagado com sucesso." << std::endl;
+            estadoAlterado = true;      //CONFIRMAR SE É NECESSARIO AQUI!!!!
+        }
+        else
+            std::cout << "Erro: Nao foi possivel encontrar o ficheiro '" << nome << "'." << std::endl;
+
     }
     else if (comando == "executa") {
         std::cout << "A executar comandos do ficheiro '" << p[0] << "'..." << std::endl;
