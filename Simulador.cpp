@@ -1,6 +1,9 @@
 #include <ctime>
 #include <cstdlib>
 #include "Simulador.h"
+
+#include <fstream>
+
 #include "Plantas/Cacto.h"
 #include "Plantas/Roseira.h"
 #include "Plantas/ErvaDaninha.h"
@@ -120,6 +123,22 @@ void Simulador::executarComando(const Comando& cmd) {
     }
     else if (comando == "executa") {
         std::cout << "A executar comandos do ficheiro '" << p[0] << "'..." << std::endl;
+        ifstream ficheiro(p[0]);
+        if (ficheiro.is_open()) {
+            string linha;
+            while (getline(ficheiro, linha)) {
+                Comando cmd_ficheiro(linha);
+                if (cmd_ficheiro.isValido()) {
+                    executarComando(cmd_ficheiro);
+                } else {
+                    std::cout << "Erro no ficheiro '" << p[0] << "': " << cmd_ficheiro.getMsgErro() << std::endl;
+                }
+            }
+            ficheiro.close();
+            std::cout << "Execucao do ficheiro '" << p[0] << "' concluida." << std::endl;
+        }
+        else
+            std::cout << "Erro: Nao foi possivel abrir o ficheiro '" << p[0] << "'." << std::endl;
     }
 
     //Comandos para o movimento do jardineiro
