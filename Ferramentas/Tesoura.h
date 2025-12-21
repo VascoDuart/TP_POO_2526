@@ -14,6 +14,7 @@ public:
     bool usarFerramenta(Posicao& pos, Jardim& j, int l, int c) override;
     char getTipoFerramenta() const override;
     Ferramenta* clona() const override;
+    void listarDetalhes() const override;
 };
 
 

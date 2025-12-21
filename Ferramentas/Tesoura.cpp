@@ -32,6 +32,9 @@ char Tesoura::getTipoFerramenta() const {
     return 't';
 }
 
+void Tesoura::listarDetalhes() const {
+}
+
 Ferramenta *Tesoura::clona() const {
     return new Tesoura(*this);
 }

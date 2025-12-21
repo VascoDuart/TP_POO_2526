@@ -31,6 +31,11 @@ char Regador::getTipoFerramenta() const {
     return 'g';
 }
 
+void Regador::listarDetalhes() const {
+    std::cout << "Capacidade: " << capacidade << "/" << Settings::Regador::capacidade
+              << " (Dose: " << dose << ")";
+}
+
 Ferramenta *Regador::clona() const {
     Regador* novo = new Regador();
     novo->capacidade = this->capacidade;

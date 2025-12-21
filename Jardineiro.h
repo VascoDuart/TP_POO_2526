@@ -46,6 +46,7 @@ public:
     int getColuna() const { return coluna; }
     int getPlantacoesRestantes() const { return plantasRestantes; }
     Ferramenta* getFerramentaNaMao() const { return ferramentaNaMao; }
+    const vector<Ferramenta*>& getInventario() { return inventario; }
     Jardineiro* clona() const;
 };
 

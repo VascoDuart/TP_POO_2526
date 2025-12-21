@@ -31,6 +31,11 @@ char Adubo::getTipoFerramenta() const {
     return 'a';
 }
 
+void Adubo::listarDetalhes() const {
+    std::cout << "Capacidade: " << capacidade << "/" << Settings::Adubo::capacidade
+              << " (Dose: " << dose << ")";
+}
+
 Ferramenta *Adubo::clona() const {
     Adubo* novo = new Adubo();
     novo->capacidade = this->capacidade;

@@ -463,7 +463,29 @@ void Simulador::executarComando(const Comando& cmd) {
         return;
     }
     else if (comando == "lferr") {
-        std::cout << "Lista de todas as ferramentas do jardineiro" << std::endl;
+        const std::vector<Ferramenta*>& inv = jardineiro->getInventario();
+        Ferramenta* naMao = jardineiro->getFerramentaNaMao();
+
+        std::cout << "--- Inventario de Ferramentas ---" << std::endl;
+
+        if (inv.empty()) {
+            std::cout << "O jardineiro nao transporta ferramentas." << std::endl;
+        } else {
+            for (Ferramenta* f : inv) {
+                if (f == naMao) {
+                    std::cout << "[ EM MAO ] ";
+                } else {
+                    std::cout << "[Mochila ] ";
+                }
+
+                std::cout << "Tipo: " << f->getTipoFerramenta()
+                          << " | ID: " << f->getNumSerie();
+                std::cout << " | Detalhes: ";
+                f->listarDetalhes();
+
+                std::cout << std::endl;
+            }
+        }
     }
 
     //Comandos para o tempo simulado

@@ -21,6 +21,7 @@ public:
     virtual bool usarFerramenta(Posicao& pos, Jardim& j, int l, int c) = 0;
     virtual char getTipoFerramenta() const = 0;
     virtual Ferramenta* clona() const = 0;
+    virtual void listarDetalhes() const = 0;
 };
 
 
