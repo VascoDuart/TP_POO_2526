@@ -65,7 +65,43 @@ void Simulador::executarComando(const Comando& cmd) {
     const std::vector<std::string>& p = cmd.getParametros();
     bool estadoAlterado = false;
 
-    if (comando == "jardim") {
+    if (comando == "executa") {
+        std::cout << "A executar comandos do ficheiro '" << p[0] << "'..." << std::endl;
+        ifstream ficheiro(p[0]);
+        ifstream ficheiroLinha1(p[0]);
+
+        if (ficheiro.is_open()) {
+            string linha;
+            string linha1;
+            char marcador = ' ';
+            getline(ficheiroLinha1, linha1, marcador);
+
+            if (jardim == nullptr &&  linha1 != "jardim") {
+                int linhas = 4;
+                int colunas = 4;
+
+                jardim = new Jardim(linhas, colunas);
+                jardineiro = new Jardineiro();
+                interfaceGrelha = new InterfaceGrelha(*jardim, *jardineiro);
+                estadoAlterado = true;
+            }
+
+            while (getline(ficheiro, linha)) {
+                cout << "Comando do ficheiro: " << linha << std::endl;
+                Comando cmd_ficheiro(linha);
+                if (cmd_ficheiro.isValido()) {
+                    executarComando(cmd_ficheiro);
+                } else {
+                    std::cout << "Erro no ficheiro '" << p[0] << "': " << cmd_ficheiro.getMsgErro() << std::endl;
+                }
+            }
+            ficheiro.close();
+            std::cout << "Execucao do ficheiro '" << p[0] << "' concluida." << std::endl;
+        }
+        else
+            std::cout << "Erro: Nao foi possivel abrir o ficheiro '" << p[0] << "'." << std::endl;
+    }
+    else if (comando == "jardim") {
         if (jardim == nullptr) {
             int linhas = std::stoi(p[0]);
             int colunas = std::stoi(p[1]);
@@ -121,7 +157,7 @@ void Simulador::executarComando(const Comando& cmd) {
             std::cout << "Erro: Nao foi possivel encontrar o ficheiro '" << nome << "'." << std::endl;
 
     }
-    else if (comando == "executa") {
+ /*   else if (comando == "executa") {
         std::cout << "A executar comandos do ficheiro '" << p[0] << "'..." << std::endl;
         ifstream ficheiro(p[0]);
         if (ficheiro.is_open()) {
@@ -139,7 +175,7 @@ void Simulador::executarComando(const Comando& cmd) {
         }
         else
             std::cout << "Erro: Nao foi possivel abrir o ficheiro '" << p[0] << "'." << std::endl;
-    }
+    }*/
 
     //Comandos para o movimento do jardineiro
     else if (comando == "e") {
