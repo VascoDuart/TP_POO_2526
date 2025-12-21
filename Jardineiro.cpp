@@ -139,7 +139,7 @@ void Jardineiro::colhe(Jardim &j) {
     }
 }
 
-void Jardineiro::pegaFerramenta(Ferramenta *f) {
+void Jardineiro::adicionaFerrInv(Ferramenta *f) {
     if (f == nullptr) {
         std::cout << "Erro: Nao e possivel pegar numa ferramenta nula." << std::endl;
         return;
@@ -149,23 +149,53 @@ void Jardineiro::pegaFerramenta(Ferramenta *f) {
     std::cout << "Ferramenta ID " << f->getNumSerie() << " adicionada ao inventario." << std::endl;
 }
 
+bool Jardineiro::selecionarFerramenta(int id) {
+    for (Ferramenta* f : inventario) {
+        if (f->getNumSerie() == id) {
+            this->ferramentaNaMao = f;
+            return true;
+        }
+    }
+    return false;
+}
+
+void Jardineiro::largaFerramenta() {
+    if (this->ferramentaNaMao == nullptr) {
+        std::cout << "Aviso: O jardineiro ja nao tinha nada na mao." << std::endl;
+        return;
+    }
+
+    std::cout << "Jardineiro guardou a ferramenta (ID: "
+              << ferramentaNaMao->getNumSerie() << ") na mochila." << std::endl;
+
+    this->ferramentaNaMao = nullptr; // A ferramenta continua no vetor 'inventario'
+}
+
 void Jardineiro::usaFerramenta(Jardim &j) {
     if (!presenteNoJardim) {
-        std::cout << "Erro: O jardineiro nao esta no jardim para usar a ferramenta." << std::endl;
+        std::cout << "Erro: O jardineiro nao esta no jardim." << std::endl;
         return;
     }
 
     if (ferramentaNaMao == nullptr) {
-        std::cout << "Erro: O jardineiro nao tem nenhuma ferramenta na mao. Use 'pega' ou 'equipa'." << std::endl;
+        std::cout << "Erro: O jardineiro nao tem nenhuma ferramenta na mao." << std::endl;
         return;
     }
 
     Posicao& pos = j.getPosicao(linha, coluna);
+    bool esgotou = ferramentaNaMao->usarFerramenta(pos, j, linha, coluna);
 
-    if (ferramentaNaMao->usarFerramenta(pos, j, linha, coluna)) {
-        std::cout << "Ferramenta ID " << ferramentaNaMao->getNumSerie() << " usada. Verificar se esgotou." << std::endl;
-        inventario.erase(std::remove(inventario.begin(), inventario.end(), ferramentaNaMao), inventario.end());
+    if (esgotou) {
+        std::cout << "A ferramenta ID " << ferramentaNaMao->getNumSerie() << " esgotou-se e foi descartada." << std::endl;
+
+        auto it = std::find(inventario.begin(), inventario.end(), ferramentaNaMao);
+        if (it != inventario.end()) {
+            inventario.erase(it);
+        }
+
         delete ferramentaNaMao;
         ferramentaNaMao = nullptr;
+    } else {
+        std::cout << "Ferramenta ID " << ferramentaNaMao->getNumSerie() << " utilizada com sucesso." << std::endl;
     }
 }

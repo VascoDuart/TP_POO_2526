@@ -204,12 +204,29 @@ void Simulador::executarComando(const Comando& cmd) {
         }
     }
     else if (comando == "larga") {
-        std::cout << "Jardineiro larga a ferramenta que esta' na sua mao" << std::endl;
-        estadoAlterado = true;
+        if (jardineiro->getFerramentaNaMao() == nullptr) {
+            std::cout << "Erro: O jardineiro nao tem nenhuma ferramenta na mao para largar." << std::endl;
+        } else {
+            jardineiro->largaFerramenta();
+            estadoAlterado = true;
+        }
     }
     else if (comando == "pega") {
-        std::cout << "Jardineiro pega na ferramenta" << std::endl;
-        estadoAlterado = true;
+        int idAlvo;
+
+        try {
+            idAlvo = std::stoi(p[0]);
+        } catch (...) {
+            std::cout << "Erro: Numero de serie '" << p[0] << "' invalido (deve ser um numero)." << std::endl;
+            return;
+        }
+
+        if (jardineiro->selecionarFerramenta(idAlvo)) {
+            std::cout << "Jardineiro colocou a ferramenta (ID: " << idAlvo << ") na mao." << std::endl;
+            estadoAlterado = true;
+        } else {
+            std::cout << "Erro: O jardineiro nao possui a ferramenta com ID " << idAlvo << " no inventario." << std::endl;
+        }
     }
     else if (comando == "compra") {
         char tipo = tolower(p[0][0]);
@@ -225,7 +242,7 @@ void Simulador::executarComando(const Comando& cmd) {
         }
 
         if (novaFerramenta != nullptr) {
-            jardineiro->pegaFerramenta(novaFerramenta);
+            jardineiro->adicionaFerrInv(novaFerramenta);
             std::cout << "Jardineiro compra uma ferramenta do tipo " << p[0] << " (ID: " << novaFerramenta->getNumSerie() << ")." << std::endl;
             estadoAlterado = true;
         }

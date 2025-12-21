@@ -35,7 +35,9 @@ public:
     void usaFerramenta(Jardim& j);
     void planta(Jardim& j, char tipoPlanta);
     void colhe(Jardim& j);
-    void pegaFerramenta(Ferramenta* f);
+    void adicionaFerrInv(Ferramenta* f);
+    bool selecionarFerramenta(int id);
+    void largaFerramenta();
 
     void resetContadoresAcoes();
 
@@ -43,6 +45,7 @@ public:
     int getLinha() const { return linha; }
     int getColuna() const { return coluna; }
     int getPlantacoesRestantes() const { return plantasRestantes; }
+    Ferramenta* getFerramentaNaMao() const { return ferramentaNaMao; }
 };
 
 

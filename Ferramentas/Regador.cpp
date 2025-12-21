@@ -9,16 +9,18 @@ Regador::~Regador() {
 }
 
 bool Regador::usarFerramenta(Posicao &pos, Jardim &j, int l, int c) {
-    if (capacidade >= dose) {
-        pos.adicionaAgua(dose);
-        capacidade -= dose;
-        std::cout << "Regador aplicado! Adicionadas " << dose << " unidades de agua. Capacidade restante: " << capacidade << std::endl;
-    } else {
-        std::cout << "Regador vazio (ID: " << getNumSerie() << "). Nao foi possivel aplicar a dose de agua." << std::endl;
+    if (capacidade > 0) {
+        int quantidadeAplicar = (capacidade < dose) ? capacidade : dose;
+
+        pos.adicionaAgua(quantidadeAplicar);
+        capacidade -= quantidadeAplicar;
+
+        std::cout << "Regador utilizado! Adicionadas " << quantidadeAplicar
+                  << " unidades de agua. Capacidade restante: " << capacidade << std::endl;
     }
 
     if (capacidade <= 0) {
-        std::cout << "O regador esgotou! Sera descartado." << std::endl;
+        std::cout << "O regador (ID: " << getNumSerie() << ") esgotou e sera descartado." << std::endl;
         return true;
     }
 
