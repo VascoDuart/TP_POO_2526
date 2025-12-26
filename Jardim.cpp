@@ -1,6 +1,8 @@
 #include <vector>
 #include "Jardim.h"
 
+#include "Plantas/PlantaExotica.h"
+
 Jardim::Jardim(int linhas, int colunas)
     : numLinhas(linhas), numColunas(colunas)
 {
@@ -76,6 +78,14 @@ void Jardim::passaInstante() {
             }
 
             if (planta != nullptr) {
+
+                PlantaExotica* exotica = dynamic_cast<PlantaExotica*>(planta);
+                if (exotica) {
+                    exotica->passaInstanteComJardim(pos, *this, i, j);
+                } else {
+                    planta->passaInstante(pos);
+                }
+
                 Roseira* roseira = dynamic_cast<Roseira*>(planta);
                 if (roseira) {
                     roseira->setRodeada(estaRodeada(i, j));
@@ -91,28 +101,39 @@ void Jardim::passaInstante() {
                 Planta* novoRebento = planta->tentaMultiplicar();
 
                 if (novoRebento != nullptr) {
-                    bool temVizinhoComPlanta = false;
-                    Posicao* posVizinha = encontraVizinhoMultiplicacao(i, j, temVizinhoComPlanta);
+                    if (exotica) {
+                        // Tenta colocar o rebento 2 posições à direita (frente das raízes)
+                        int novaC = j + 2;
+                        if (ePosicaoValida(i, novaC) && !grelha[i][novaC].temPlanta()) {
+                            grelha[i][novaC].setPlanta(novoRebento);
+                            std::cout << "Rebento de Planta Exotica colocado em (" << (char)('A'+i) << (char)('A'+novaC) << ")" << std::endl;
+                        } else {
+                            delete novoRebento; // Não há espaço válido
+                        }
+                    } else {
+                        bool temVizinhoComPlanta = false;
+                        Posicao* posVizinha = encontraVizinhoMultiplicacao(i, j, temVizinhoComPlanta);
 
-                    if (posVizinha != nullptr) {
-                        if (novoRebento->getTipoPlanta() == 'e') {
-                            if (temVizinhoComPlanta) {
-                                Planta* plantaASerMorta = posVizinha->getPlanta();
-                                std::cout << "Erva Daninha em (" << i << ", " << j << ") matou a planta "
-                                          << plantaASerMorta->getTipoPlanta() << " em posicao vizinha!" << std::endl;
+                        if (posVizinha != nullptr) {
+                            if (novoRebento->getTipoPlanta() == 'e') {
+                                if (temVizinhoComPlanta) {
+                                    Planta* plantaASerMorta = posVizinha->getPlanta();
+                                    std::cout << "Erva Daninha em (" << i << ", " << j << ") matou a planta "
+                                              << plantaASerMorta->getTipoPlanta() << " em posicao vizinha!" << std::endl;
 
-                                Planta* pMortaPorErva = posVizinha->removePlanta();
-                                delete pMortaPorErva;
+                                    Planta* pMortaPorErva = posVizinha->removePlanta();
+                                    delete pMortaPorErva;
+                                }
+
+                                posVizinha->setPlanta(novoRebento);
+                            } else if (!temVizinhoComPlanta) {
+                                posVizinha->setPlanta(novoRebento);
+                            } else {
+                                delete novoRebento;
                             }
-
-                            posVizinha->setPlanta(novoRebento);
-                        } else if (!temVizinhoComPlanta) {
-                            posVizinha->setPlanta(novoRebento);
                         } else {
                             delete novoRebento;
                         }
-                    } else {
-                        delete novoRebento;
                     }
                 }
             }
