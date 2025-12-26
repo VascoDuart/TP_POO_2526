@@ -8,6 +8,8 @@ Planta::~Planta() {
 
 int Planta::getAguaInterna() const { return aguaInterna; }
 
+int Planta::getNutrientesInternos() const { return nutrientesInternos; }
+
 char Planta::getTipoPlanta() const { return tipoPlanta; }
 
 Beleza Planta::getBeleza() const { return beleza; }

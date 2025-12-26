@@ -4,17 +4,23 @@ Adubo::Adubo() : Ferramenta() {
     capacidade = Settings::Adubo::capacidade;
 }
 
+Adubo::~Adubo() {
+    std::cout << "Adubo destruido!" << std::endl;
+}
+
 bool Adubo::usarFerramenta(Posicao &pos, Jardim &j, int l, int c) {
-    if (capacidade >= dose) {
-        pos.adicionaNutrientes(dose);
-        capacidade -= dose;
-        std::cout << "Adubo aplicado! Adicionadas " << dose << " unidades de nutrientes. Capacidade restante: " << capacidade << std::endl;
-    } else {
-        std::cout << "Adubo vazio (ID: " << getNumSerie() << "). Nao foi possivel aplicar a dose de nutrientes." << std::endl;
+    if (capacidade > 0) {
+        int quantidadeAplicar = (capacidade < dose) ? capacidade : dose;
+
+        pos.adicionaNutrientes(quantidadeAplicar);
+        capacidade -= quantidadeAplicar;
+
+        std::cout << "Adubo aplicado! Adicionadas " << quantidadeAplicar
+                  << " unidades de nutrientes. Capacidade restante: " << capacidade << std::endl;
     }
 
     if (capacidade <= 0) {
-        std::cout << "O pacote de adubo esgotou e foi levado pelo vento! Sera descartado." << std::endl;
+        std::cout << "O pacote de adubo (ID: " << getNumSerie() << ") esgotou e sera descartado." << std::endl;
         return true;
     }
 
@@ -23,6 +29,11 @@ bool Adubo::usarFerramenta(Posicao &pos, Jardim &j, int l, int c) {
 
 char Adubo::getTipoFerramenta() const {
     return 'a';
+}
+
+void Adubo::listarDetalhes() const {
+    std::cout << "Capacidade: " << capacidade << "/" << Settings::Adubo::capacidade
+              << " (Dose: " << dose << ")";
 }
 
 Ferramenta *Adubo::clona() const {

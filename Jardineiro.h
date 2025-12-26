@@ -4,11 +4,14 @@
 #include <iostream>
 #include <vector>
 #include "Ferramentas/Ferramenta.h"
+#include "Plantas/Planta.h"
+#include "Posicao.h"
 #include "Jardim.h"
 
 using namespace std;
 
 class Jardineiro {
+private:
     bool presenteNoJardim;
     int linha;
     int coluna;
@@ -23,6 +26,7 @@ class Jardineiro {
 
 public:
     Jardineiro();
+    ~Jardineiro();
 
     bool move(char direcao, const Jardim& j);
     bool entraNoJardim(int l, int c, const Jardim& j);
@@ -31,15 +35,19 @@ public:
     void usaFerramenta(Jardim& j);
     void planta(Jardim& j, char tipoPlanta);
     void colhe(Jardim& j);
-    void pegaFerramenta(Ferramenta* f);
+    void adicionaFerrInv(Ferramenta* f);
+    bool selecionarFerramenta(int id);
+    void largaFerramenta();
 
-    void resetContadoresAcoes(); // Chamado no início de cada instante
+    void resetContadoresAcoes();
 
     bool estaPresente() const { return presenteNoJardim; }
     int getLinha() const { return linha; }
     int getColuna() const { return coluna; }
-
-    ~Jardineiro();
+    int getPlantacoesRestantes() const { return plantasRestantes; }
+    Ferramenta* getFerramentaNaMao() const { return ferramentaNaMao; }
+    const vector<Ferramenta*>& getInventario() { return inventario; }
+    Jardineiro* clona() const;
 };
 
 

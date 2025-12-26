@@ -1,9 +1,222 @@
-//
-// Created by david on 24/10/2025.
-//
-
 #include "Jardineiro.h"
+#include <algorithm>
 
-Jardineiro::Jardineiro() {}
+Jardineiro::Jardineiro()
+        : presenteNoJardim(false), linha(-1), coluna(-1), ferramentaNaMao(nullptr),
+          entrouNesteInstante(false), saiuNesteInstante(false)
+{
+    resetContadoresAcoes();
+}
 
-Jardineiro::~Jardineiro() {}
+Jardineiro::~Jardineiro() {
+    for (Ferramenta* f : inventario) {
+        delete f;
+    }
+    inventario.clear();
+}
+
+void Jardineiro::resetContadoresAcoes() {
+    movimentosRestantes = Settings::Jardineiro::max_movimentos;
+    plantasRestantes = Settings::Jardineiro::max_plantacoes;
+    colheitasRestantes = Settings::Jardineiro::max_colheitas;
+
+    entrouNesteInstante = false;
+    saiuNesteInstante = false;
+}
+
+bool Jardineiro::entraNoJardim(int l, int c, const Jardim &j) {
+    if (!j.ePosicaoValida(l, c)) {
+        return false;
+    }
+
+    if (presenteNoJardim) {
+        linha = l;
+        coluna = c;
+
+        return true;
+    }
+
+    if (entrouNesteInstante) {
+        std::cout << "Aviso: O jardineiro ja entrou neste instante (limite: 1)." << std::endl;
+        return false;
+    }
+
+    presenteNoJardim = true;
+    linha = l;
+    coluna = c;
+    entrouNesteInstante = true;
+
+    return true;
+}
+
+bool Jardineiro::saiDoJardim() {
+    if (!presenteNoJardim) {
+        std::cout << "Aviso: O jardineiro ja esta fora do jardim." << std::endl;
+        return false;
+    }
+
+    if (saiuNesteInstante) {
+        std::cout << "Aviso: O jardineiro ja saiu neste instante (limite: 1)." << std::endl;
+        return false;
+    }
+
+    presenteNoJardim = false;
+    linha = -1;
+    coluna = -1;
+    saiuNesteInstante = true;
+
+    return true;
+}
+
+bool Jardineiro::move(char direcao, const Jardim &j) {
+    if (!presenteNoJardim) {
+        std::cout << "Erro: O jardineiro nao esta no jardim para se mover." << std::endl;
+        return false;
+    }
+
+    if (movimentosRestantes <= 0) {
+        std::cout << "Erro: Movimentos esgotados neste instante (limite: " << Settings::Jardineiro::max_movimentos << ")." << std::endl;
+        return false;
+    }
+
+    int novaLinha = linha;
+    int novaColuna = coluna;
+
+    switch (tolower(direcao)) {
+        case 'e': novaColuna--; break;
+        case 'd': novaColuna++; break;
+        case 'c': novaLinha--; break;
+        case 'b': novaLinha++; break;
+        default: return false;
+    }
+
+    if (j.ePosicaoValida(novaLinha, novaColuna)) {
+        linha = novaLinha;
+        coluna = novaColuna;
+        movimentosRestantes--;
+        return true;
+    }
+
+    std::cout << "Erro: Movimento invalido, fora dos limites do jardim." << std::endl;
+    return false;
+}
+
+void Jardineiro::planta(Jardim &j, char tipoPlanta) {
+    if (!presenteNoJardim || !j.ePosicaoValida(linha, coluna)) {
+        std::cout << "Aviso: Jardineiro nao esta numa posicao valida para completar a plantacao." << std::endl;
+        return;
+    }
+
+    if (plantasRestantes <= 0) {
+        std::cout << "Aviso: Plantacoes esgotadas neste instante (limite: " << Settings::Jardineiro::max_plantacoes << ")." << std::endl;
+        return;
+    }
+
+    plantasRestantes--;
+}
+
+void Jardineiro::colhe(Jardim &j) {
+    if (!presenteNoJardim || colheitasRestantes <= 0) {
+        std::cout << "Erro: Jardineiro fora do jardim ou colheitas esgotadas (limite: " << Settings::Jardineiro::max_colheitas << ")." << std::endl;
+        return;
+    }
+
+    Posicao& pos = j.getPosicao(linha, coluna);
+
+    if (!pos.temPlanta()) {
+        std::cout << "Erro: Nao ha planta para colher nesta posicao." << std::endl;
+        return;
+    }
+
+    Planta* plantaColhida = pos.removePlanta();
+
+    if (plantaColhida != nullptr) {
+        plantaColhida->acaoAoSerRemovida(pos);
+        delete plantaColhida;
+        colheitasRestantes--;
+        std::cout << "Colheita bem sucedida na posicao " << (char)('A' + linha) << (char)('A' + coluna) << std::endl;
+        return;
+    }
+}
+
+void Jardineiro::adicionaFerrInv(Ferramenta *f) {
+    if (f == nullptr) {
+        std::cout << "Erro: Nao e possivel pegar numa ferramenta nula." << std::endl;
+        return;
+    }
+
+    inventario.push_back(f);
+    std::cout << "Ferramenta ID " << f->getNumSerie() << " adicionada ao inventario." << std::endl;
+}
+
+bool Jardineiro::selecionarFerramenta(int id) {
+    for (Ferramenta* f : inventario) {
+        if (f->getNumSerie() == id) {
+            this->ferramentaNaMao = f;
+            return true;
+        }
+    }
+    return false;
+}
+
+void Jardineiro::largaFerramenta() {
+    if (this->ferramentaNaMao == nullptr) {
+        std::cout << "Aviso: O jardineiro ja nao tinha nada na mao." << std::endl;
+        return;
+    }
+
+    std::cout << "Jardineiro guardou a ferramenta (ID: "
+              << ferramentaNaMao->getNumSerie() << ") na mochila." << std::endl;
+
+    this->ferramentaNaMao = nullptr; // A ferramenta continua no vetor 'inventario'
+}
+
+void Jardineiro::usaFerramenta(Jardim &j) {
+    if (!presenteNoJardim) {
+        std::cout << "Erro: O jardineiro nao esta no jardim." << std::endl;
+        return;
+    }
+
+    if (ferramentaNaMao == nullptr) {
+        std::cout << "Erro: O jardineiro nao tem nenhuma ferramenta na mao." << std::endl;
+        return;
+    }
+
+    Posicao& pos = j.getPosicao(linha, coluna);
+    bool esgotou = ferramentaNaMao->usarFerramenta(pos, j, linha, coluna);
+
+    if (esgotou) {
+        std::cout << "A ferramenta ID " << ferramentaNaMao->getNumSerie() << " esgotou-se e foi descartada." << std::endl;
+
+        auto it = std::find(inventario.begin(), inventario.end(), ferramentaNaMao);
+        if (it != inventario.end()) {
+            inventario.erase(it);
+        }
+
+        delete ferramentaNaMao;
+        ferramentaNaMao = nullptr;
+    } else {
+        std::cout << "Ferramenta ID " << ferramentaNaMao->getNumSerie() << " utilizada com sucesso." << std::endl;
+    }
+}
+
+Jardineiro* Jardineiro::clona() const {
+    Jardineiro* novoJardineiro = new Jardineiro();
+    novoJardineiro->presenteNoJardim = this->presenteNoJardim;
+    novoJardineiro->linha = this->linha;
+    novoJardineiro->coluna = this->coluna;
+    novoJardineiro->movimentosRestantes = this->movimentosRestantes;
+    novoJardineiro->colheitasRestantes = this->colheitasRestantes;
+    novoJardineiro->plantasRestantes = this->plantasRestantes;
+    novoJardineiro->entrouNesteInstante = this->entrouNesteInstante;
+    novoJardineiro->saiuNesteInstante = this->saiuNesteInstante;
+    for (Ferramenta* f : this->inventario) {
+        novoJardineiro->inventario.push_back(f->clona());
+    }
+    if (this->ferramentaNaMao != nullptr) {
+        novoJardineiro->ferramentaNaMao = this->ferramentaNaMao->clona();
+    } else {
+        novoJardineiro->ferramentaNaMao = nullptr;
+    }
+}
+
