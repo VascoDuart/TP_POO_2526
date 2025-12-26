@@ -11,6 +11,7 @@
 #include "Ferramentas/Regador.h"
 #include "Ferramentas/Adubo.h"
 #include "Ferramentas/Tesoura.h"
+#include "Ferramentas/Pesticida.h"
 
 Simulador::Simulador()
     : jardim(nullptr), jardineiro(nullptr), interfaceGrelha(nullptr), instanteAtual(0)
@@ -316,8 +317,7 @@ void Simulador::executarComando(const Comando& cmd) {
             case 'g': novaFerramenta = new Regador(); break;
             case 'a': novaFerramenta = new Adubo(); break;
             case 't': novaFerramenta = new Tesoura(); break;
-            case 'z':
-                std::cout << "Ferramenta 'Z' nao implementada." << std::endl;
+            case 'z': novaFerramenta = new Pesticida(); break;
                 return;
         }
 

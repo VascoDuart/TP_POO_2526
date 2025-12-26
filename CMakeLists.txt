@@ -34,4 +34,6 @@ add_executable(TP_POO_2526 main.cpp
         Plantas/PlantaExotica.cpp
         Plantas/PlantaExotica.h
         InterfaceGrelha.cpp
-        InterfaceGrelha.h)
+        InterfaceGrelha.h
+        Ferramentas/Pesticida.cpp
+        Ferramentas/Pesticida.h)
