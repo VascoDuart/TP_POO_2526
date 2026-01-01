@@ -43,8 +43,15 @@ void InterfaceGrelha::desenharJardim() const {
 
             std::cout << char_a_imprimir << ' ';
         }
-        std::cout << std::endl;
+        std::cout << (char)('A' + i) << std::endl;
     }
+    std::cout << " ";
+
+    for (int col = 0; col < colunas; ++col) {
+        std::cout << (char)('A' + col) << " ";
+    }
+    std::cout << std::endl;
+
     std::cout << "\n--- Jardineiro ---" << std::endl;
     if (jd.estaPresente()) {
         std::cout << "Posicao: " << (char)('A' + jd.getLinha())
