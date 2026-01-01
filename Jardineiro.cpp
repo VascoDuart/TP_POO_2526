@@ -68,14 +68,14 @@ bool Jardineiro::saiDoJardim() {
     return true;
 }
 
-bool Jardineiro::move(char direcao, const Jardim &j) {
+bool Jardineiro::move(char direcao, Jardim &j) {
     if (!presenteNoJardim) {
         std::cout << "Erro: O jardineiro nao esta no jardim para se mover." << std::endl;
         return false;
     }
 
     if (movimentosRestantes <= 0) {
-        std::cout << "Erro: Movimentos esgotados neste instante (limite: " << Settings::Jardineiro::max_movimentos << ")." << std::endl;
+        std::cout << "Erro: Movimentos esgotados neste instante." << std::endl;
         return false;
     }
 
@@ -94,10 +94,26 @@ bool Jardineiro::move(char direcao, const Jardim &j) {
         linha = novaLinha;
         coluna = novaColuna;
         movimentosRestantes--;
+
+        Posicao& pos = j.getPosicao(linha, coluna);
+
+        if (pos.temFerramenta()) {
+            Ferramenta* f = pos.getFerramenta();
+
+            if (this->adicionaFerrInv(f)) {
+                pos.removeFerramenta();
+
+                j.gerarFerramentaAleatoria();
+
+                std::cout << "Recolheu automaticamente: " << f->getTipoFerramenta() << std::endl;
+            } else {
+                std::cout << "Inventario cheio! A ferramenta permanece no chao." << std::endl;
+            }
+        }
         return true;
     }
 
-    std::cout << "Erro: Movimento invalido, fora dos limites do jardim." << std::endl;
+    std::cout << "Erro: Movimento invalido (fora dos limites)." << std::endl;
     return false;
 }
 
@@ -139,14 +155,15 @@ void Jardineiro::colhe(Jardim &j) {
     }
 }
 
-void Jardineiro::adicionaFerrInv(Ferramenta *f) {
+bool Jardineiro::adicionaFerrInv(Ferramenta *f) {
     if (f == nullptr) {
         std::cout << "Erro: Nao e possivel pegar numa ferramenta nula." << std::endl;
-        return;
+        return false;
     }
 
     inventario.push_back(f);
     std::cout << "Ferramenta ID " << f->getNumSerie() << " adicionada ao inventario." << std::endl;
+    return true;
 }
 
 bool Jardineiro::selecionarFerramenta(int id) {

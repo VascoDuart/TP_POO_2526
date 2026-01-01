@@ -28,14 +28,14 @@ public:
     Jardineiro();
     ~Jardineiro();
 
-    bool move(char direcao, const Jardim& j);
+    bool move(char direcao, Jardim& j);
     bool entraNoJardim(int l, int c, const Jardim& j);
     bool saiDoJardim();
 
     void usaFerramenta(Jardim& j);
     void planta(Jardim& j, char tipoPlanta);
     void colhe(Jardim& j);
-    void adicionaFerrInv(Ferramenta* f);
+    bool adicionaFerrInv(Ferramenta* f);
     bool selecionarFerramenta(int id);
     void largaFerramenta();
 
