@@ -25,6 +25,8 @@ public:
     void adicionaObjeto(int linha, int coluna, Planta* p);
     void adicionaObjeto(int linha, int coluna, Ferramenta* f);
 
+    void gerarFerramentaAleatoria();
+
     void passaInstante();
 
     Jardim* clona() const;

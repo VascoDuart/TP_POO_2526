@@ -5,7 +5,7 @@
 #include "Pesticida.h"
 
 Pesticida::Pesticida() : Ferramenta(), doses(3) {
-    std::cout << "Pesticida (ID: " << getNumSerie() << ") comprado com 3 doses." << std::endl;
+    std::cout << "Pesticida criado!" << std::endl;
 }
 
 Pesticida::~Pesticida() {

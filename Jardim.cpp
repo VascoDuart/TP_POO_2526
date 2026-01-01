@@ -2,6 +2,10 @@
 #include "Jardim.h"
 
 #include "Plantas/PlantaExotica.h"
+#include "Ferramentas/Regador.h"
+#include "Ferramentas/Adubo.h"
+#include "Ferramentas/Tesoura.h"
+#include "Ferramentas/Pesticida.h"
 
 Jardim::Jardim(int linhas, int colunas)
     : numLinhas(linhas), numColunas(colunas)
@@ -187,6 +191,30 @@ void Jardim::adicionaObjeto(int linha, int coluna, Ferramenta *f) {
 
     pos.setFerramenta(f);
     std::cout << "Ferramenta adicionada em (" << linha << ", " << coluna << ")." << std::endl;
+}
+
+void Jardim::gerarFerramentaAleatoria() {
+    int l, c;
+    int tentativas = 0;
+    int maxTentativas = numLinhas * numColunas;
+
+    do {
+        l = rand() % numLinhas;
+        c = rand() % numColunas;
+        tentativas++;
+    } while ((grelha[l][c].temFerramenta() || grelha[l][c].temPlanta()) && tentativas < maxTentativas);
+
+    if (tentativas >= maxTentativas) return;
+
+    int tipo = rand() % 4;
+    Ferramenta* nova = nullptr;
+
+    if (tipo == 0) nova = new Regador();
+    else if (tipo == 1) nova = new Adubo();
+    else if (tipo == 2) nova = new Tesoura();
+    else nova = new Pesticida();
+
+    grelha[l][c].setFerramenta(nova);
 }
 
 Jardim *Jardim::clona() const {

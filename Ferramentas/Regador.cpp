@@ -2,6 +2,7 @@
 
 Regador::Regador() : Ferramenta() {
     capacidade = Settings::Regador::capacidade;
+    std::cout << "Regador criado!" << std::endl;
 }
 
 Regador::~Regador() {

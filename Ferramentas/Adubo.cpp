@@ -2,6 +2,7 @@
 
 Adubo::Adubo() : Ferramenta() {
     capacidade = Settings::Adubo::capacidade;
+    std::cout << "Adubo criado!" << std::endl;
 }
 
 Adubo::~Adubo() {

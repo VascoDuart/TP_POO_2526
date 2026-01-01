@@ -112,6 +112,10 @@ void Simulador::executarComando(const Comando& cmd) {
             interfaceGrelha = new InterfaceGrelha(*jardim, *jardineiro);
             estadoAlterado = true;
 
+            for (int i = 0; i < 3; ++i) {
+                jardim->gerarFerramentaAleatoria();
+            }
+
             std::cout << "Jardim de " << linhas << "x" << colunas << " criado com sucesso." << std::endl;
         } else {
             std::cout << "Erro: O comando 'jardim' ja foi executado." << std::endl;
@@ -274,7 +278,7 @@ void Simulador::executarComando(const Comando& cmd) {
             case 'c': novaPlanta = new Cacto(); break;
             case 'r': novaPlanta = new Roseira(); break;
             case 'e': novaPlanta = new ErvaDaninha(); break;
-            //case 'x': novaPlanta = new PlantaExotica(); break;
+            case 'x': novaPlanta = new PlantaExotica(); break;
         }
 
         if (novaPlanta != nullptr) {
