@@ -55,18 +55,29 @@ bool Jardim::encontraVizinhoMultiplicacao(int l, int c, int &nl, int &nc, bool &
     int dl[] = {-1, 1, 0, 0};
     int dc[] = {0, 0, 1, -1};
 
+    struct DirecaoValida { int l, c; };
+    std::vector<DirecaoValida> possiveis;
+
     for (int i = 0; i < 4; ++i) {
         int tempL = l + dl[i];
         int tempC = c + dc[i];
 
         if (ePosicaoValida(tempL, tempC)) {
-            nl = tempL;
-            nc = tempC;
-            temPlanta = grelha[nl][nc].temPlanta();
-            return true;
+            possiveis.push_back({tempL, tempC});
         }
     }
-    return false;
+
+    if (possiveis.empty()) {
+        return false;
+    }
+
+    int escolha = rand() % possiveis.size();
+    nl = possiveis[escolha].l;
+    nc = possiveis[escolha].c;
+
+    temPlanta = grelha[nl][nc].temPlanta();
+
+    return true;
 }
 
 void Jardim::passaInstante(Jardineiro& jd) {
