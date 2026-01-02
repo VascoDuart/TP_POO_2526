@@ -569,9 +569,7 @@ void Simulador::executarComando(const Comando& cmd) {
 
 void Simulador::avancarInstante(int numInstantes) {
     for (int i = 0; i < numInstantes; ++i) {
-        jardineiro->usaFerramenta(*jardim);
-
-        jardim->passaInstante();
+        jardim->passaInstante(*jardineiro);
 
         instanteAtual++;
 

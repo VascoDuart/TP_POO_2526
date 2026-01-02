@@ -5,6 +5,8 @@
 #include "Plantas/Roseira.h"
 #include "Ferramentas/Ferramenta.h"
 
+class Jardineiro;
+
 class Jardim {
     Posicao** grelha;
     int numLinhas;
@@ -27,7 +29,7 @@ public:
 
     void gerarFerramentaAleatoria();
 
-    void passaInstante();
+    void passaInstante(Jardineiro& jd);
 
     Jardim* clona() const;
 };

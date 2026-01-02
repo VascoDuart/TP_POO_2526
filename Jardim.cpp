@@ -6,6 +6,7 @@
 #include "Ferramentas/Adubo.h"
 #include "Ferramentas/Tesoura.h"
 #include "Ferramentas/Pesticida.h"
+#include "Jardineiro.h"
 
 Jardim::Jardim(int linhas, int colunas)
     : numLinhas(linhas), numColunas(colunas)
@@ -67,23 +68,18 @@ Posicao* Jardim::encontraVizinhoMultiplicacao(int l, int c, bool &temPlantaVizin
     return nullptr;
 }
 
-void Jardim::passaInstante() {
+void Jardim::passaInstante(Jardineiro& jd) {
     std::cout << "\n--- Passa Instante ---" << std::endl;
     std::vector<std::pair<int, int>> posicoesParaRemover;
+
+    if (jd.estaPresente()) {
+        jd.usaFerramenta(*this);
+    }
 
     for (int i = 0; i < numLinhas; ++i) {
         for (int j = 0; j < numColunas; ++j) {
             Posicao& pos = grelha[i][j];
             Planta* planta = pos.getPlanta();
-
-            Ferramenta* ferramenta = pos.getFerramenta();
-            if (ferramenta != nullptr) {
-                if (ferramenta->usarFerramenta(pos, *this, i, j)) {
-                    Ferramenta* fEsgotada = pos.removeFerramenta();
-                    delete fEsgotada; // Liberta a memória
-                    std::cout << "Ferramenta descartada (ID: " << fEsgotada->getNumSerie() << ")." << std::endl;
-                }
-            }
 
             if (planta != nullptr) {
 
@@ -98,8 +94,6 @@ void Jardim::passaInstante() {
                 if (roseira) {
                     roseira->setRodeada(estaRodeada(i, j));
                 }
-
-                planta->passaInstante(pos);
 
                 if (planta->verificaMorte(pos)) {
                     posicoesParaRemover.push_back({i, j});
