@@ -2,7 +2,6 @@
 #define TP_POO_2526_TESOURA_H
 
 #include "Ferramenta.h"
-#include "../Posicao.h"
 #include  "../Plantas/Planta.h"
 
 class Tesoura : public Ferramenta {

@@ -1,8 +1,6 @@
 #ifndef TP_POO_2526_FERRAMENTA_H
 #define TP_POO_2526_FERRAMENTA_H
 
-#include "string"
-#include <iostream>
 #include "../Posicao.h"
 class Jardim;
 

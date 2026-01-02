@@ -167,25 +167,6 @@ void Simulador::executarComando(const Comando& cmd) {
             std::cout << "Erro: Nao foi possivel encontrar o ficheiro '" << nome << "'." << std::endl;
 
     }
- /*   else if (comando == "executa") {
-        std::cout << "A executar comandos do ficheiro '" << p[0] << "'..." << std::endl;
-        ifstream ficheiro(p[0]);
-        if (ficheiro.is_open()) {
-            string linha;
-            while (getline(ficheiro, linha)) {
-                Comando cmd_ficheiro(linha);
-                if (cmd_ficheiro.isValido()) {
-                    executarComando(cmd_ficheiro);
-                } else {
-                    std::cout << "Erro no ficheiro '" << p[0] << "': " << cmd_ficheiro.getMsgErro() << std::endl;
-                }
-            }
-            ficheiro.close();
-            std::cout << "Execucao do ficheiro '" << p[0] << "' concluida." << std::endl;
-        }
-        else
-            std::cout << "Erro: Nao foi possivel abrir o ficheiro '" << p[0] << "'." << std::endl;
-    }*/
 
     //Comandos para o movimento do jardineiro
     else if (comando == "e") {
