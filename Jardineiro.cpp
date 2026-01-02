@@ -128,8 +128,8 @@ bool Jardineiro::move(char direcao, Jardim &j) {
 }
 
 void Jardineiro::planta(Jardim &j, char tipoPlanta) {
-    if (!presenteNoJardim || !j.ePosicaoValida(linha, coluna)) {
-        std::cout << "Aviso: Jardineiro nao esta numa posicao valida para completar a plantacao." << std::endl;
+    if (!j.ePosicaoValida(linha, coluna)) {
+        std::cout << "Aviso: Nao introduziu uma posicao valida para completar a plantacao." << std::endl;
         return;
     }
 

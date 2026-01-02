@@ -252,11 +252,6 @@ void Simulador::executarComando(const Comando& cmd) {
             return;
         }
 
-        if (pos.temFerramenta()) {
-            std::cout << "Erro: Nao e possivel plantar. A posicao " << p[0] << " ja contem uma ferramenta." << std::endl;
-            return;
-        }
-
         if (jardineiro->getPlantacoesRestantes() <= 0) {
             std::cout << "Erro: Jardineiro nao tem acoes de plantacao restantes neste instante." << std::endl;
             return;
