@@ -17,12 +17,10 @@ void PlantaExotica::passaInstanteComJardim(Posicao& solo, Jardim& jardim, int l,
 
     this->passaInstante(solo);
 
-    // Habilidade Especial: Raízes Longas (Nutrientes da própria posição)
     int nProprio = std::min(solo.getNutrientes(), 2);
     solo.retiraNutrientes(nProprio);
     nutrientesInternos += nProprio;
 
-    // Habilidade Especial: Nutrientes da posição à direita
     if (jardim.ePosicaoValida(l, c + 1)) {
         Posicao& soloDireita = jardim.getPosicao(l, c + 1);
         int nDireita = std::min(soloDireita.getNutrientes(), 2);
@@ -39,7 +37,6 @@ bool PlantaExotica::verificaMorte(const Posicao& solo) const {
         return true;
     }
 
-    // Condição específica: Se o solo estiver muito saturado de nutrientes (> 150)
     if (solo.getNutrientes() > 150) {
         std::cout << "Planta Exotica morreu por toxicidade de nutrientes no solo." << std::endl;
         return true;
@@ -48,10 +45,8 @@ bool PlantaExotica::verificaMorte(const Posicao& solo) const {
     return false;
 }
 Planta* PlantaExotica::tentaMultiplicar() {
-    // Requisito: Ter nutrientes > 80 e água > 40
     if (nutrientesInternos > 80 && aguaInterna > 40) {
 
-        // Cria o novo rebento com metade dos recursos
         int novaAgua = aguaInterna / 2;
         int novosNutrientes = nutrientesInternos / 2;
 
@@ -68,7 +63,13 @@ Planta* PlantaExotica::tentaMultiplicar() {
     return nullptr;
 }
 void PlantaExotica::acaoAoSerRemovida(Posicao& solo) {
+    int nutrientesDevolvidos = static_cast<int>(nutrientesInternos * 0.3);
+    solo.adicionaNutrientes(nutrientesDevolvidos);
+
+    int aguaDisponivel = solo.getAgua();
+    solo.retiraAgua(std::min(aguaDisponivel, 10));
 }
+
 void PlantaExotica::serPodada() { }
 
 Planta *PlantaExotica::clona() const {

@@ -22,7 +22,7 @@ public:
     Posicao& getPosicao(int linha, int coluna) const;
     bool ePosicaoValida(int linha, int coluna) const;
     bool estaRodeada(int linha, int coluna) const;
-    Posicao *encontraVizinhoMultiplicacao(int l, int c, bool &temPlantaVizinha);
+    bool encontraVizinhoMultiplicacao(int l, int c, int &nl, int &nc, bool &temPlanta);
 
     void adicionaObjeto(int linha, int coluna, Planta* p);
     void adicionaObjeto(int linha, int coluna, Ferramenta* f);

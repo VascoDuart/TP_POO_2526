@@ -1,7 +1,3 @@
-//
-// Created by vasco on 26/12/2025.
-//
-
 #ifndef TP_POO_2526_PESTICIDA_H
 #define TP_POO_2526_PESTICIDA_H
 

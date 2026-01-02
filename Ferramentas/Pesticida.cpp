@@ -1,7 +1,3 @@
-//
-// Created by vasco on 26/12/2025.
-//
-
 #include "Pesticida.h"
 
 Pesticida::Pesticida() : Ferramenta(), doses(3) {

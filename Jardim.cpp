@@ -51,26 +51,33 @@ bool Jardim::estaRodeada(int linha, int coluna) const {
     return true;
 }
 
-Posicao* Jardim::encontraVizinhoMultiplicacao(int l, int c, bool &temPlantaVizinha) {
+bool Jardim::encontraVizinhoMultiplicacao(int l, int c, int &nl, int &nc, bool &temPlanta) {
     int dl[] = {-1, 1, 0, 0};
     int dc[] = {0, 0, 1, -1};
 
     for (int i = 0; i < 4; ++i) {
-        int nl = l + dl[i];
-        int nc = c + dc[i];
+        int tempL = l + dl[i];
+        int tempC = c + dc[i];
 
-        if (ePosicaoValida(nl, nc)) {
-            temPlantaVizinha = (grelha[nl][nc].getPlanta() != nullptr);
-            return grelha[nl] + nc;
+        if (ePosicaoValida(tempL, tempC)) {
+            nl = tempL;
+            nc = tempC;
+            temPlanta = grelha[nl][nc].temPlanta();
+            return true;
         }
     }
-    temPlantaVizinha = false;
-    return nullptr;
+    return false;
 }
 
 void Jardim::passaInstante(Jardineiro& jd) {
     std::cout << "\n--- Passa Instante ---" << std::endl;
     std::vector<std::pair<int, int>> posicoesParaRemover;
+
+    struct NovoRebento {
+        int l, c;
+        Planta* planta;
+    };
+    std::vector<NovoRebento> novosRebentos;
 
     if (jd.estaPresente()) {
         jd.usaFerramenta(*this);
@@ -82,7 +89,6 @@ void Jardim::passaInstante(Jardineiro& jd) {
             Planta* planta = pos.getPlanta();
 
             if (planta != nullptr) {
-
                 PlantaExotica* exotica = dynamic_cast<PlantaExotica*>(planta);
                 if (exotica) {
                     exotica->passaInstanteComJardim(pos, *this, i, j);
@@ -100,42 +106,23 @@ void Jardim::passaInstante(Jardineiro& jd) {
                     continue;
                 }
 
-                Planta* novoRebento = planta->tentaMultiplicar();
+                Planta* novo = planta->tentaMultiplicar();
+                if (novo != nullptr) {
+                    int nl, nc;
+                    bool temPlantaVizinha = false;
 
-                if (novoRebento != nullptr) {
-                    if (exotica) {
-                        // Tenta colocar o rebento 2 posições à direita (frente das raízes)
-                        int novaC = j + 2;
-                        if (ePosicaoValida(i, novaC) && !grelha[i][novaC].temPlanta()) {
-                            grelha[i][novaC].setPlanta(novoRebento);
-                            std::cout << "Rebento de Planta Exotica colocado em (" << (char)('A'+i) << (char)('A'+novaC) << ")" << std::endl;
-                        } else {
-                            delete novoRebento; // Não há espaço válido
+                    if (encontraVizinhoMultiplicacao(i, j, nl, nc, temPlantaVizinha)) {
+                        if (planta->getTipoPlanta() == 'e') {
+                            novosRebentos.push_back({nl, nc, novo});
+                        }
+                        else if (!temPlantaVizinha) {
+                            novosRebentos.push_back({nl, nc, novo});
+                        }
+                        else {
+                            delete novo;
                         }
                     } else {
-                        bool temVizinhoComPlanta = false;
-                        Posicao* posVizinha = encontraVizinhoMultiplicacao(i, j, temVizinhoComPlanta);
-
-                        if (posVizinha != nullptr) {
-                            if (novoRebento->getTipoPlanta() == 'e') {
-                                if (temVizinhoComPlanta) {
-                                    Planta* plantaASerMorta = posVizinha->getPlanta();
-                                    std::cout << "Erva Daninha em (" << i << ", " << j << ") matou a planta "
-                                              << plantaASerMorta->getTipoPlanta() << " em posicao vizinha!" << std::endl;
-
-                                    Planta* pMortaPorErva = posVizinha->removePlanta();
-                                    delete pMortaPorErva;
-                                }
-
-                                posVizinha->setPlanta(novoRebento);
-                            } else if (!temVizinhoComPlanta) {
-                                posVizinha->setPlanta(novoRebento);
-                            } else {
-                                delete novoRebento;
-                            }
-                        } else {
-                            delete novoRebento;
-                        }
+                        delete novo;
                     }
                 }
             }
@@ -143,11 +130,23 @@ void Jardim::passaInstante(Jardineiro& jd) {
     }
 
     for (const auto& coord : posicoesParaRemover) {
-        int i = coord.first;
-        int j = coord.second;
+        delete grelha[coord.first][coord.second].removePlanta();
+    }
 
-        Planta* plantaMorta = grelha[i][j].removePlanta();
-        delete plantaMorta;
+    for (auto& rebento : novosRebentos) {
+        Posicao& destino = grelha[rebento.l][rebento.c];
+
+        if (rebento.planta->getTipoPlanta() == 'e' && destino.temPlanta()) {
+            Planta* pMorta = destino.removePlanta();
+            delete pMorta;
+            std::cout << "Erva Daninha matou planta em " << (char)('A' + rebento.l) << (char)('A' + rebento.c) << "!" << std::endl;
+        }
+
+        if (!destino.temPlanta()) {
+            destino.setPlanta(rebento.planta);
+        } else {
+            delete rebento.planta;
+        }
     }
 }
 
