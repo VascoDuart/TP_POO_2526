@@ -141,16 +141,21 @@ void Jardineiro::planta(Jardim &j, char tipoPlanta) {
     plantasRestantes--;
 }
 
-void Jardineiro::colhe(Jardim &j) {
-    if (!presenteNoJardim || colheitasRestantes <= 0) {
-        std::cout << "Erro: Jardineiro fora do jardim ou colheitas esgotadas (limite: " << Settings::Jardineiro::max_colheitas << ")." << std::endl;
+void Jardineiro::colhe(int l, int c, Jardim &j) {
+    if (colheitasRestantes <= 0) {
+        std::cout << "Erro: Numero de colheitas esgotadas (limite: " << Settings::Jardineiro::max_colheitas << ")." << std::endl;
         return;
     }
 
-    Posicao& pos = j.getPosicao(linha, coluna);
+    if (!j.ePosicaoValida(l, c)) {
+        std::cout << "Erro: Posicao invalida." << std::endl;
+        return;
+    }
+
+    Posicao& pos = j.getPosicao(l, c);
 
     if (!pos.temPlanta()) {
-        std::cout << "Erro: Nao ha planta para colher nesta posicao." << std::endl;
+        std::cout << "Erro: Nao ha planta para colher na posicao " << (char)('A' + l) << (char)('A' + c) << "." << std::endl;
         return;
     }
 
@@ -160,8 +165,7 @@ void Jardineiro::colhe(Jardim &j) {
         plantaColhida->acaoAoSerRemovida(pos);
         delete plantaColhida;
         colheitasRestantes--;
-        std::cout << "Colheita bem sucedida na posicao " << (char)('A' + linha) << (char)('A' + coluna) << std::endl;
-        return;
+        std::cout << "Colheita bem sucedida na posicao " << (char)('A' + l) << (char)('A' + c) << std::endl;
     }
 }
 

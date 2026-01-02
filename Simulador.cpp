@@ -226,7 +226,11 @@ void Simulador::executarComando(const Comando& cmd) {
     //Comandos para acoes
 
     else if (comando == "colhe") {
-        jardineiro->colhe(*jardim);
+        std::pair<int, int> coords = comandoParaCoordenadas(p[0]);
+        int l = coords.first;
+        int c = coords.second;
+
+        jardineiro->colhe(l, c,*jardim);
         std::cout << "Jardineiro colhe na posicao " << p[0] << std::endl;
         estadoAlterado = true;
     }

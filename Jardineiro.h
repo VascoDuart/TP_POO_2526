@@ -34,7 +34,7 @@ public:
 
     void usaFerramenta(Jardim& j);
     void planta(Jardim& j, char tipoPlanta);
-    void colhe(Jardim& j);
+    void colhe(int l, int c, Jardim& j);
     bool adicionaFerrInv(Ferramenta* f);
     bool selecionarFerramenta(int id);
     void largaFerramenta();
