@@ -24,27 +24,39 @@ void Jardineiro::resetContadoresAcoes() {
     saiuNesteInstante = false;
 }
 
-bool Jardineiro::entraNoJardim(int l, int c, const Jardim &j) {
+bool Jardineiro::entraNoJardim(int l, int c, Jardim &j) {
     if (!j.ePosicaoValida(l, c)) {
+        std::cout << "Erro: Coordenadas fora dos limites do jardim." << std::endl;
         return false;
     }
 
     if (presenteNoJardim) {
         linha = l;
         coluna = c;
-
-        return true;
+    } else {
+        if (entrouNesteInstante) {
+            std::cout << "Aviso: O jardineiro ja entrou neste instante (limite: 1)." << std::endl;
+            return false;
+        }
+        presenteNoJardim = true;
+        linha = l;
+        coluna = c;
+        entrouNesteInstante = true;
     }
 
-    if (entrouNesteInstante) {
-        std::cout << "Aviso: O jardineiro ja entrou neste instante (limite: 1)." << std::endl;
-        return false;
-    }
+    Posicao& pos = j.getPosicao(linha, coluna);
 
-    presenteNoJardim = true;
-    linha = l;
-    coluna = c;
-    entrouNesteInstante = true;
+    if (pos.temFerramenta()) {
+        Ferramenta* f = pos.getFerramenta();
+
+        if (this->adicionaFerrInv(f)) {
+            pos.removeFerramenta();
+
+            j.gerarFerramentaAleatoria();
+
+            std::cout << "Jardineiro entrou e recolheu automaticamente: " << f->getTipoFerramenta() << std::endl;
+        }
+    }
 
     return true;
 }
@@ -106,8 +118,6 @@ bool Jardineiro::move(char direcao, Jardim &j) {
                 j.gerarFerramentaAleatoria();
 
                 std::cout << "Recolheu automaticamente: " << f->getTipoFerramenta() << std::endl;
-            } else {
-                std::cout << "Inventario cheio! A ferramenta permanece no chao." << std::endl;
             }
         }
         return true;

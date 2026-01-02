@@ -29,7 +29,7 @@ public:
     ~Jardineiro();
 
     bool move(char direcao, Jardim& j);
-    bool entraNoJardim(int l, int c, const Jardim& j);
+    bool entraNoJardim(int l, int c, Jardim& j);
     bool saiDoJardim();
 
     void usaFerramenta(Jardim& j);
