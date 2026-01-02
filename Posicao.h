@@ -3,6 +3,7 @@
 
 
 #include "Plantas/Planta.h"
+#include "Settings.h"
 
 class Ferramenta;
 class Planta;
@@ -14,6 +15,7 @@ class Posicao {
 
 public:
     Posicao();
+    ~Posicao();
 
     int getAgua() const;
     void adicionaAgua(int valor);

@@ -235,5 +235,6 @@ Jardineiro* Jardineiro::clona() const {
     } else {
         novoJardineiro->ferramentaNaMao = nullptr;
     }
+    return novoJardineiro;
 }
 

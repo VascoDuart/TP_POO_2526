@@ -1,11 +1,15 @@
 #include "Posicao.h"
-#include "Settings.h"
 
 Posicao::Posicao()
         : planta(nullptr), ferramenta(nullptr)
 {
     agua = (std::rand() % (Settings::Jardim::agua_max - Settings::Jardim::agua_min + 1)) + Settings::Jardim::agua_min;
     nutrientes = (std::rand() % (Settings::Jardim::nutrientes_max - Settings::Jardim::nutrientes_min + 1)) + Settings::Jardim::nutrientes_min;
+}
+
+Posicao::~Posicao() {
+    delete planta;
+    //delete ferramenta;
 }
 
 int Posicao::getAgua() const {

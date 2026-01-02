@@ -18,6 +18,10 @@ Jardim::Jardim(int linhas, int colunas)
 
 Jardim::~Jardim() {
     for (int i = 0; i < numLinhas; ++i) {
+        for (int j=0; j < numColunas; ++j) {
+            delete grelha[i][j].removePlanta();
+            delete grelha[i][j].removeFerramenta();
+        }
         delete[] grelha[i];
     }
     delete[] grelha;

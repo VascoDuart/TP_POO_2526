@@ -22,6 +22,11 @@ Simulador::~Simulador() {
     delete jardim;
     delete jardineiro;
     delete interfaceGrelha;
+
+    for (auto const& [nome, copiaJardim] : copiasJardins) {
+        delete copiaJardim;
+    }
+    copiasJardins.clear();
 }
 
 void Simulador::iniciar() {
@@ -136,7 +141,7 @@ void Simulador::executarComando(const Comando& cmd) {
     else if (comando == "recupera") {
         std::cout << "A recuperar o estado do jardim do ficheiro '" << p[0] << "'..." << std::endl;
         std::string nome = p[0];
-        if (copiasJardins.count(nome)) {    //talvez trocar para contains
+        if (copiasJardins.count(nome)) {
             delete jardim;
             jardim = copiasJardins[nome];
             copiasJardins.erase(nome);
