@@ -209,7 +209,7 @@ void Jardineiro::usaFerramenta(Jardim &j) {
     }
 
     if (ferramentaNaMao == nullptr) {
-        std::cout << "Erro: O jardineiro nao tem nenhuma ferramenta na mao." << std::endl;
+        std::cout << "O jardineiro nao tem nenhuma ferramenta na mao." << std::endl;
         return;
     }
 
