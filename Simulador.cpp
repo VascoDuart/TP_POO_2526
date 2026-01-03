@@ -161,7 +161,7 @@ void Simulador::executarComando(const Comando& cmd) {
             delete copiasJardins[nome];
             copiasJardins.erase(nome);
             std::cout << "Ficheiro '" << nome << "' apagado com sucesso." << std::endl;
-            estadoAlterado = true;      //CONFIRMAR SE É NECESSARIO AQUI!!!!
+            estadoAlterado = true;
         }
         else
             std::cout << "Erro: Nao foi possivel encontrar o ficheiro '" << nome << "'." << std::endl;
