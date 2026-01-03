@@ -128,13 +128,7 @@ bool Jardineiro::move(char direcao, Jardim &j) {
 }
 
 void Jardineiro::planta(Jardim &j, char tipoPlanta) {
-    if (!j.ePosicaoValida(linha, coluna)) {
-        std::cout << "Aviso: Nao introduziu uma posicao valida para completar a plantacao." << std::endl;
-        return;
-    }
-
     if (plantasRestantes <= 0) {
-        std::cout << "Aviso: Plantacoes esgotadas neste instante (limite: " << Settings::Jardineiro::max_plantacoes << ")." << std::endl;
         return;
     }
 

@@ -241,6 +241,11 @@ void Simulador::executarComando(const Comando& cmd) {
         int c = coords.second;
         char tipo = tolower(p[1][0]);
 
+        if (jardineiro->getPlantacoesRestantes() <= 0) {
+            std::cout << "Erro: O jardineiro ja esgotou o limite de plantacoes (2) para este instante." << std::endl;
+            return;
+        }
+
         if (!jardim->ePosicaoValida(l, c)) {
             std::cout << "Erro: Posicao '" << p[0] << "' fora dos limites do jardim." << std::endl;
             return;
