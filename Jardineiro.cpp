@@ -193,7 +193,7 @@ void Jardineiro::largaFerramenta() {
     std::cout << "Jardineiro guardou a ferramenta (ID: "
               << ferramentaNaMao->getNumSerie() << ") na mochila." << std::endl;
 
-    this->ferramentaNaMao = nullptr; // A ferramenta continua no vetor 'inventario'
+    this->ferramentaNaMao = nullptr;
 }
 
 void Jardineiro::usaFerramenta(Jardim &j) {
