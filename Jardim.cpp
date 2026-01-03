@@ -119,14 +119,30 @@ void Jardim::passaInstante(Jardineiro& jd) {
 
                 Planta* novo = planta->tentaMultiplicar();
                 if (novo != nullptr) {
-                    int nl, nc;
-                    bool temPlantaVizinha = false;
+                    int nl = i, nc = j;
+                    bool posicaoValida = false;
 
-                    if (encontraVizinhoMultiplicacao(i, j, nl, nc, temPlantaVizinha)) {
-                        if (planta->getTipoPlanta() == 'e') {
+                    if (planta->getTipoPlanta() == 'x') {
+                        nl = i;
+                        nc = j + 1;
+                        posicaoValida = ePosicaoValida(nl, nc);
+                    } else {
+                        bool temPlantaVizinha = false;
+                        posicaoValida = encontraVizinhoMultiplicacao(i, j, nl, nc, temPlantaVizinha);
+                    }
+
+                    if (posicaoValida) {
+                        if (planta->getTipoPlanta() == 'x') {
+                            if (!grelha[nl][nc].temPlanta()) {
+                                novosRebentos.push_back({nl, nc, novo});
+                            } else {
+                                delete novo;
+                            }
+                        }
+                        else if (planta->getTipoPlanta() == 'e') {
                             novosRebentos.push_back({nl, nc, novo});
                         }
-                        else if (!temPlantaVizinha) {
+                        else if (!grelha[nl][nc].temPlanta()) {
                             novosRebentos.push_back({nl, nc, novo});
                         }
                         else {
