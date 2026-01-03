@@ -14,7 +14,7 @@
 #include "Ferramentas/Pesticida.h"
 
 Simulador::Simulador()
-    : jardim(nullptr), jardineiro(nullptr), interfaceGrelha(nullptr), instanteAtual(0)
+    : jardim(nullptr), jardineiro(nullptr), interfaceGrelha(nullptr), instanteAtual(0), continuarSimulacao(true)
 {
 }
 
@@ -34,7 +34,7 @@ void Simulador::iniciar() {
 
     std::cout << "Simulador iniciado!" << std::endl;
 
-    while (true) {
+    while (continuarSimulacao) {
         Comando cmd = lerComando();
         if (!cmd.isValido()) {
             std::cout << cmd.getMsgErro() << std::endl;
@@ -556,7 +556,7 @@ void Simulador::executarComando(const Comando& cmd) {
 
     else if (comando == "fim") {
         std::cout << "A encerrar o simulador..." << std::endl;
-        exit(0);
+        continuarSimulacao = false;
     }
     else {
         std::cout << "Comando '" << comando << "' valido, mas a funcionalidade nao esta implementada." << std::endl;

@@ -13,6 +13,7 @@
 
 class Simulador {
 private:
+    bool continuarSimulacao;
     Jardim* jardim;
     Jardineiro* jardineiro;
     InterfaceGrelha* interfaceGrelha;
